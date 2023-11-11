@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from .models import Crypto
 
-# Create your views here.
+def dashboard(request):
+    cryptos = Crypto.objects.all()
+    return render(request, 'mainApp/dashboard.html', {'cryptos': cryptos})
