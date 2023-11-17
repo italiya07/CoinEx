@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="966354f0-4026-4fa6-a2e8-e668814a1918" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/CoinEx_project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoinEx_project/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/management/commands/add_fear_and_greed_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/management/commands/add_news_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/templates/mainApp/crypto_highlights.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/templates/mainApp/crypto_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/templates/mainApp/fear_and_greed_index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mainApp/templates/mainApp/news_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoinEx_project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoinEx_project/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mainApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainApp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainApp/static/mainApp/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/mainApp/static/mainApp/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainApp/templates/mainApp/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/mainApp/templates/mainApp/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mainApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainApp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mainApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainApp/views.py" afterDir="false" />
     </list>
@@ -23,40 +32,45 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
-        <option value="Python Script" />
         <option value="CSS File" />
+        <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2Y27yZ63pAlHjysbCPiBQhnFxzJ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "highlights",
-    "last_opened_file_path": "C:/Users/makka/Documents/MAC/term3/internet_applications/project/CoinEx/CoinEx_project",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;highlights&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/makka/Documents/MAC/term3/internet_applications/project/CoinEx/CoinEx_project&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.manage">
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\makka\Documents\MAC\term3\internet_applications\project\CoinEx\CoinEx_project\mainApp\templates" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Django Server.CoinEx_project">
     <configuration name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CoinEx_project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -85,6 +99,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="CoinEx_project.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -116,7 +131,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1699712075350</updated>
-      <workItem from="1699712076391" duration="1630000" />
+      <workItem from="1699712076391" duration="8118000" />
+      <workItem from="1699887799411" duration="80000" />
     </task>
     <servers />
   </component>
