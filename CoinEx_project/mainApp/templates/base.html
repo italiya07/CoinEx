@@ -1,0 +1,19 @@
+<!-- crypto_highlights/templates/base.html -->
+<!-- Add this to the head section of your base template -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Crypto Highlights{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'mainApp/styles.css' %}">
+</head>
+<body>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
