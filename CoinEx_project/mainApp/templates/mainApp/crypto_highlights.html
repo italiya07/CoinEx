@@ -1,0 +1,52 @@
+<!-- crypto_highlights/templates/crypto_highlights/crypto_highlights.html -->
+
+<!-- Container for Highlights Section with Dropdown -->
+<div class="highlights-dropdown">
+    <h2 class="highlights-heading">Crypto Highlights</h2>
+    <button class="dropdown-btn" onclick="toggleHighlights()">Toggle Highlights</button>
+
+    <!-- Highlights Content -->
+    <div class="highlights-container" id="highlights-container">
+
+        <!-- Crypto Box -->
+        <div class="box-container crypto-box">
+            <h3>Top 5 Cryptocurrencies</h3>
+            <!-- Crypto Box Content -->
+            <ul>
+                {% for crypto in top_cryptos %}
+                    <li>{{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.today_price }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'crypto_list' %}">View Full List</a>
+        </div>
+
+        <!-- News Box -->
+        <div class="box-container news-box">
+            <h3>Latest News</h3>
+            <!-- News Box Content -->
+            <ul>
+                {% for news in latest_news %}
+                    <li><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'news_list' %}">View All News</a>
+        </div>
+
+        <!-- Fear & Greed Box -->
+        <div class="box-container fear-and-greed-box">
+            <h3>Fear & Greed Index</h3>
+            <!-- Fear & Greed Box Content -->
+            <p>Latest Value: {{ latest_index.value }}</p>
+            <a href="{% url 'fear_and_greed_index' %}">View Full Index</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- JavaScript to toggle visibility -->
+<script>
+    function toggleHighlights() {
+        var highlightsContainer = document.getElementById("highlights-container");
+        highlightsContainer.style.display = (highlightsContainer.style.display === "none" || highlightsContainer.style.display === "") ? "flex" : "none";
+    }
+</script>
