@@ -1,19 +1,27 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, Cryptocurrency
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff', 'date_joined')
+    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff')
     search_fields = ('email', 'first_name', 'last_name')
-    ordering = ('date_joined',)
+    ordering = ('id',)
 
     # Remove 'groups' and 'user_permissions' from filter_horizontal
     filter_horizontal = ()
     
     # Remove 'groups' from list_filter
     list_filter = ()
+    
+    # Exclude 'date_joined' from fieldsets
+    fieldsets = (
+        
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+    )
 
 
 # Register the CustomUser model with the admin site
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Cryptocurrency)

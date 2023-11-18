@@ -71,3 +71,18 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+
+class Cryptocurrency(models.Model):
+    name = models.CharField(max_length=255)
+    symbol = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    one_hour_change = models.DecimalField(max_digits=5, decimal_places=2)
+    one_hour_flag = models.IntegerField()
+    twenty_four_hour_change = models.DecimalField(max_digits=5, decimal_places=2)
+    twenty_four_hour_flag = models.IntegerField()
+    market_cap = models.BigIntegerField()
+    volume = models.BigIntegerField()
+
+    def __str__(self):
+        return self.name
