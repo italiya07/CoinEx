@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from .models import Crypto, FearAndGreedIndex, News, Cryptocurrency
-from .forms import CustomUserForm
+from .forms import CustomUserForm,  EmailAuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login as django_login, authenticate
 
 def index(request):
     cryptos = Cryptocurrency.objects.all()
@@ -26,7 +26,7 @@ def register(request):
             user = form.save()
             # form.save()
             print("after save user")
-            login(request, user)
+            # login(request, user)
             return redirect('login')
             
     else:
@@ -35,13 +35,13 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
+        form = EmailAuthenticationForm(request, request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
+            django_login(request, user)
             return redirect('index')  # Redirect to a success page
     else:
-        form = AuthenticationForm()
+        form = EmailAuthenticationForm()
     return render(request, 'CoinEx_Index/login.html', {'form': form})
 
 def dashboard(request):

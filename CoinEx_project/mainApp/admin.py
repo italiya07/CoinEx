@@ -4,7 +4,7 @@ from .models import User, Cryptocurrency
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff')
+    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff',)
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('id',)
 
@@ -17,9 +17,11 @@ class CustomUserAdmin(UserAdmin):
     # Exclude 'date_joined' from fieldsets
     fieldsets = (
         
-        ('Personal Info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'email', 'date_joined', 'password')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
+
+    readonly_fields = ['date_joined']
 
 
 # Register the CustomUser model with the admin site
