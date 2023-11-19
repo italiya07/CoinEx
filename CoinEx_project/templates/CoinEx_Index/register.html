@@ -34,6 +34,13 @@
                 {{ form.password2 }}
                 {{ form.password2.errors | safe }}
             </div>
+            <!-- <div class="form-group">
+                <label for="{{ form.id_or_photo.id_for_label }}">Upload a valid photo ID:</label>
+                {{ form.id_or_photo }}
+                {{ form.id_or_photo.errors | safe }}
+            </div> -->
+
+
 {% if next %}
     {% if user.is_authenticated %}
       <p>Your account doesn't have access to this page. To proceed,

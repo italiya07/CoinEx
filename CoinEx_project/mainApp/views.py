@@ -20,9 +20,12 @@ def index(request):
 
 def register(request):
     if request.method == 'POST':
+        # form = CustomUserForm(request.POST, request.FILES)
         form = CustomUserForm(request.POST)
+
         if form.is_valid():
             print("Befor save user")
+            print(form, "*******")
             user = form.save()
             # form.save()
             print("after save user")
