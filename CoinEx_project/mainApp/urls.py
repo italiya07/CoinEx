@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import dashboard, crypto_list, fear_and_greed_index, news_list
+from . import views 
 
 urlpatterns = [
     path('', views.index, name='index'),
