@@ -1,0 +1,13 @@
+<!-- crypto_highlights/templates/crypto_highlights/news_list.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+<link href="{% static 'style/highlights.css'%}" rel="stylesheet">
+{% block content %}
+    <h1>Complete List of News</h1>
+    <ul>
+        {% for news in all_news %}
+            <li><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,6 +1,8 @@
 # crypto_highlights/management/commands/add_news_data.py
-
 from django.core.management.base import BaseCommand
+from datetime import date, timedelta
+from django.utils import timezone
+import random
 from mainApp.models import News
 
 class Command(BaseCommand):
@@ -22,6 +24,18 @@ class Command(BaseCommand):
         ]
 
         for data in news_data:
-            News.objects.create(**data)
+            News.objects.create(
+                title=data['title'],
+                link=data['link'],
+                published_date=self.generate_random_date(),
+            )
 
         self.stdout.write(self.style.SUCCESS('Successfully added data to the News model'))
+
+    def generate_random_date(self):
+        # Generate a random date between May 2023 and October 2023
+        start_date = date(2023, 5, 1)
+        end_date = date(2023, 10, 31)
+        random_days = random.randint(0, (end_date - start_date).days)
+        random_date = start_date + timedelta(days=random_days)
+        return timezone.make_aware(timezone.datetime(random_date.year, random_date.month, random_date.day))

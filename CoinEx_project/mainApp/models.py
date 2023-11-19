@@ -1,12 +1,7 @@
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
-class Crypto(models.Model):
-    name = models.CharField(max_length=100)
-    symbol = models.CharField(max_length=10)
-    today_price = models.DecimalField(max_digits=10, decimal_places=2)
-    def __str__(self):
-        return self.name
 
 class FearAndGreedIndex(models.Model):
     date = models.DateField()
@@ -17,11 +12,9 @@ class FearAndGreedIndex(models.Model):
 class News(models.Model):
     title = models.CharField(max_length=500)
     link = models.URLField()
+    published_date = models.DateField(default=date.today)
     def __str__(self):
         return self.title
-
-
-
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):

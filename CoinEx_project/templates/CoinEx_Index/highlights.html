@@ -1,0 +1,75 @@
+<!-- Container for Highlights Section with Toggle Switch -->
+<div class="container mt-4">
+    <div class="d-flex align-items-center justify-content-between">
+        <h2 class="display-8 text-left mb-0">Highlights</h2>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="toggleSwitch" onclick="toggleHighlights()">
+        </div>
+    </div>
+
+<!-- Highlights Content -->
+    <div class="row" id="highlights-container" {% if not highlights_visible %} style="display: none;" {% endif %}>
+
+    <!-- Highlights Content -->
+    <div class="row" id="highlights-container">
+
+        <!-- Crypto Box -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Top 5 Cryptocurrencies</h3>
+                    <!-- Crypto Box Content -->
+                    <ul class="list-group">
+                        {% for crypto in top_cryptos %}
+                            <li class="list-group-item">{{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.price }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View Full List</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Box -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Latest News</h3>
+                    <!-- News Box Content -->
+                    <ul class="list-group">
+                        {% for news in latest_news %}
+                            <li class="list-group-item"><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary mt-2">View All News</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fear & Greed Box -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Fear & Greed Index</h3>
+                    <!-- Fear & Greed Box Content -->
+                    <p class="card-text">Latest Value: {{ latest_index.value }}</p>
+                    <a href="{% url 'fear_and_greed_index' %}" class="btn btn-outline-primary mt-2">View Full Index</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- JavaScript to toggle visibility -->
+<script>
+    var highlightsContainer = document.getElementById("highlights-container");
+    var toggleSwitch = document.getElementById("toggleSwitch");
+
+    function toggleHighlights() {
+        if (highlightsContainer.style.display === "none" || highlightsContainer.style.display === "") {
+            highlightsContainer.style.display = "flex";
+        } else {
+            highlightsContainer.style.display = "none";
+        }
+    }
+</script>
