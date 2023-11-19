@@ -1,0 +1,58 @@
+<!-- crypto_highlights/templates/crypto_highlights/fear_and_greed_index.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+<link href="{% static 'style/highlights.css'%}" rel="stylesheet">
+{% block content %}
+    <h1>Complete Fear & Greed Index</h1>
+    <canvas id="fearAndGreedChart" width="800" height="400"></canvas>
+
+    <script>
+        // Get the data from the Django context and convert it to a format suitable for Chart.js
+        var historicalData = [
+            {% for index in all_indexes %}
+                { date: '{{ index.date }}', value: {{ index.value }} },
+            {% endfor %}
+        ];
+
+        // Set up the Chart.js line chart
+        var ctx = document.getElementById('fearAndGreedChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: historicalData.map(data => data.date),
+                datasets: [{
+                    label: 'Fear & Greed Index',
+                    data: historicalData.map(data => data.value),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                scales: {
+                    x: [{
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            tooltipFormat: 'll',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }],
+                    y: [{
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                        title: {
+                            display: true,
+                            text: 'Fear & Greed Index Value'
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}
