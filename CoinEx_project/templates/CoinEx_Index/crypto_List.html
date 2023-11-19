@@ -16,11 +16,11 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ crypto.name }}</td>
-                    <td>${{ crypto.Price }}</td>
-                    <td class="{% if crypto.oneHourFlag == -1 %}text-danger{% elif crypto.oneHourFlag == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.oneHour }}</td>
-                    <td class="{% if crypto.TwentyFourHourFlag == -1 %}text-danger{% elif crypto.TwentyFourHourFlag == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.TwentyFourHour }}</td>
-                    <td>${{ crypto.MarketCap }}</td>
-                    <td>${{ crypto.Volume }}</td>
+                    <td>${{ crypto.price }}</td>
+                    <td class="{% if crypto.one_hour_flag == -1 %}text-danger{% elif crypto.oneHourFlag == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.one_hour_change }}</td>
+                    <td class="{% if crypto.twenty_four_hour_flag == -1 %}text-danger{% elif crypto.TwentyFourHourFlag == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.twenty_four_hour_change }}</td>
+                    <td>${{ crypto.market_cap }}</td>
+                    <td>${{ crypto.volume }}</td>
                 </tr> {% endfor %} </tbody>
         </table>
     </div> {% endblock %}
