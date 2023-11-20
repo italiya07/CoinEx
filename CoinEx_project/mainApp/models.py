@@ -60,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    # id_or_photo = models.ImageField(upload_to='id_or_photo/', blank=True, null=True)
+    id_or_photo = models.ImageField(upload_to='id_or_photo/', blank=True, null=True)
 
     objects = CustomUserManager()
 
