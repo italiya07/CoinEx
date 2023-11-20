@@ -7,29 +7,72 @@ from .forms import CustomUserForm,  EmailAuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
 
-def index(request):
-    cryptos = Cryptocurrency.objects.all()
-    # Retrieve top 5 cryptocurrencies for the highlight box
-    top_cryptos = Cryptocurrency.objects.all()[:5]
+from requests import Request, Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+import json
 
-    # Retrieve latest 5 news for the highlight box
-    latest_news = News.objects.all()[:5]
 
-    # Retrieve the latest Fear & Greed Index value
-    latest_index = FearAndGreedIndex.objects.latest('date')
-    context = {
-        "cryptos": cryptos,
-        "top_cryptos": top_cryptos,
-        "latest_news": latest_news,
-        "latest_index": latest_index
+def apis(change='USD'):
+
+    url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+    parameters = {
+    'start': 1,
+    'limit': 50,
+    'convert': change
     }
-    return render(request, 'CoinEx_Index/index.html', context=context)
+    headers = {
+    'Accepts': 'application/json',
+    'X-CMC_PRO_API_KEY': '94cc259d-0784-4fb2-bd01-4b0f9dc3926f',
+    }
+
+    session = Session()
+    session.headers.update(headers)
+
+    try:
+        response = session.get(url, params=parameters)
+        data = json.loads(response.text)
+        # print(data)
+        return data
+    except (ConnectionError, Timeout, TooManyRedirects) as e:
+        # print(e)
+        return e
+
+def index(request):
+
+    main_data = apis()
+    print(main_data['data'])
+    data = {
+        "cryptos": main_data['data'],
+        "currency" : 'USD'
+    }
+    print("\n we are taking context\n")
+    print(data)
+
+    return render(request, 'CoinEx_Index/index.html', context=data)
+    # return render(request, 'CoinEx_Index/index.html', context=context)
+
+def exchange(request, currency_symbol):
+
+    main_data = apis(currency_symbol)
+    print(main_data['data'])
+    data = {
+        "cryptos": main_data['data'], 
+        "currency" : currency_symbol
+    }
+    print("\n we are taking context\n")
+    print(data)
+
+    return render(request, 'CoinEx_Index/index.html', context=data)
+
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserForm(request.POST)
+        form = CustomUserForm(request.POST, request.FILES)
+        # form = CustomUserForm(request.POST)
+
         if form.is_valid():
             print("Befor save user")
+            print(form, "*******")
             user = form.save()
             # form.save()
             print("after save user")
@@ -61,4 +104,8 @@ def fear_and_greed_index(request):
 
 def news_list(request):
     all_news = News.objects.all()
-    return render(request, 'CoinEx_Index/news_list.html', {'all_news': all_news})
+    return render(request, 'mainApp/news_list.html', {'all_news': all_news})
+
+
+
+
