@@ -6,6 +6,9 @@ from .models import FearAndGreedIndex, News, Cryptocurrency
 from .forms import CustomUserForm,  EmailAuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
+from django.contrib.auth.models import auth
+from django.contrib.auth.decorators import login_required
+
 
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
@@ -40,27 +43,28 @@ def apis(change='USD'):
 def index(request):
 
     main_data = apis()
-    print(main_data['data'])
+    # print(main_data['data'])
     data = {
         "cryptos": main_data['data'],
         "currency" : 'USD'
     }
-    print("\n we are taking context\n")
-    print(data)
+    # print("\n we are taking context\n")
+    # print(data)
 
     return render(request, 'CoinEx_Index/index.html', context=data)
     # return render(request, 'CoinEx_Index/index.html', context=context)
 
+@login_required(login_url='login')
 def exchange(request, currency_symbol):
 
     main_data = apis(currency_symbol)
-    print(main_data['data'])
+    # print(main_data['data'])
     data = {
         "cryptos": main_data['data'], 
         "currency" : currency_symbol
     }
-    print("\n we are taking context\n")
-    print(data)
+    # print("\n we are taking context\n")
+    # print(data)
 
     return render(request, 'CoinEx_Index/index.html', context=data)
 
@@ -88,11 +92,22 @@ def login(request):
         form = EmailAuthenticationForm(request, request.POST)
         if form.is_valid():
             user = form.get_user()
+            if user.is_authenticated:
+                print("user is authenticated", user.is_authenticated)
+            else:
+                print("not authenticated", user.is_authenticated)
             django_login(request, user)
+
+            if user.is_authenticated:
+                print("user is authenticated", user.is_authenticated)
             return redirect('index')  # Redirect to a success page
     else:
         form = EmailAuthenticationForm()
     return render(request, 'CoinEx_Index/login.html', {'form': form})
+
+def logout(request):
+    auth.logout(request)
+    return redirect("/")
 
 def crypto_highlights(request):
     all_cryptos = Cryptocurrency.objects.all()
