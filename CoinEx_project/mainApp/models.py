@@ -77,6 +77,8 @@ class Cryptocurrency(models.Model):
     twenty_four_hour_flag = models.IntegerField()
     market_cap = models.BigIntegerField()
     volume = models.BigIntegerField()
+    launch_date = models.DateField(null=True, blank=True, default=date.today)
 
     def __str__(self):
         return self.name
+
