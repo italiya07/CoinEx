@@ -6,14 +6,47 @@ from .models import FearAndGreedIndex, News, Cryptocurrency
 from .forms import CustomUserForm,  EmailAuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
+from requests import Request, Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+import json
+
+
+def apis(change='USD'):
+
+    url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+    parameters = {
+    'start': 1,
+    'limit': 50,
+    'convert': change
+    }
+    headers = {
+    'Accepts': 'application/json',
+    'X-CMC_PRO_API_KEY': '94cc259d-0784-4fb2-bd01-4b0f9dc3926f',
+    }
+
+    session = Session()
+    session.headers.update(headers)
+
+    try:
+        response = session.get(url, params=parameters)
+        data = json.loads(response.text)
+        # print(data)
+        return data
+    except (ConnectionError, Timeout, TooManyRedirects) as e:
+        # print(e)
+        return e
 
 def index(request):
-    cryptos = Cryptocurrency.objects.all()
+
+    main_data = apis()
+    print(main_data['data'])
+
+    cryptos_db = Cryptocurrency.objects.all()
 
     # Calculate topness scores for all cryptocurrencies
     cryptos_with_topness = [
         (crypto, calculate_topness(crypto))
-        for crypto in cryptos
+        for crypto in cryptos_db
     ]
 
     # Sort cryptocurrencies based on topness scores in descending order
@@ -31,21 +64,43 @@ def index(request):
     # Set a static value for testing
     #static_index_value = 35  # You can change this to any value for testing
 
-    context = {
-        "cryptos": cryptos,
+    data = {
+        "cryptos": main_data['data'],
+        "currency" : 'USD',
+        "cryptos": cryptos_db,
         "top_cryptos": top_cryptos,
         "latest_news": latest_news,
         #"latest_index": FearAndGreedIndex(value=static_index_value),
         "latest_index": latest_index
     }
+    print("\n we are taking context\n")
+    print(data)
 
-    return render(request, 'CoinEx_Index/index.html', context=context)
+    return render(request, 'CoinEx_Index/index.html', context=data)
+    # return render(request, 'CoinEx_Index/index.html', context=context)
+
+def exchange(request, currency_symbol):
+
+    main_data = apis(currency_symbol)
+    print(main_data['data'])
+    data = {
+        "cryptos": main_data['data'], 
+        "currency" : currency_symbol
+    }
+    print("\n we are taking context\n")
+    print(data)
+
+    return render(request, 'CoinEx_Index/index.html', context=data)
+
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserForm(request.POST)
+        form = CustomUserForm(request.POST, request.FILES)
+        # form = CustomUserForm(request.POST)
+
         if form.is_valid():
             print("Befor save user")
+            print(form, "*******")
             user = form.save()
             # form.save()
             print("after save user")
