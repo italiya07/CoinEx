@@ -46,12 +46,7 @@ def index(request):
     # print(main_data['data'])
     data = {
         "cryptos": main_data['data'],
-        "currency" : 'USD',
-        "cryptos": cryptos_db,
-        "top_cryptos": top_cryptos,
-        "latest_news": latest_news,
-        #"latest_index": FearAndGreedIndex(value=static_index_value),
-        "latest_index": latest_index
+        "currency" : 'USD'
     }
     # print("\n we are taking context\n")
     # print(data)
@@ -124,22 +119,8 @@ def fear_and_greed_index(request):
 
 def news_list(request):
     all_news = News.objects.all()
-    return render(request, 'CoinEx_Index/news_list.html', {'all_news': all_news})
+    return render(request, 'mainApp/news_list.html', {'all_news': all_news})
 
-def calculate_topness(crypto):
-    # Define weights for each factor
-    weight_change = 0.4
-    weight_volume = 0.3
-    weight_market_cap = 0.3
 
-    # Convert Decimal values to float for calculation
-    change = float(crypto.twenty_four_hour_change)
-    volume = float(crypto.volume)
-    market_cap = float(crypto.market_cap)
 
-    # Calculate the topness score using the weights
-    topness_score = (change * weight_change +
-                     volume * weight_volume +
-                     market_cap * weight_market_cap)
 
-    return topness_score

@@ -1,13 +1,12 @@
-{% load custom_filters %}
-
 <!-- Container for Highlights Section with Toggle Switch -->
 <div class="container mt-4">
-    <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="fs-4">Today's Highlights</h2>
+    <div class="d-flex align-items-center justify-content-between">
+        <h2 class="display-8 text-left mb-0">Highlights</h2>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="toggleSwitch" onclick="toggleHighlights()">
         </div>
     </div>
+
 <!-- Highlights Content -->
     <div class="row" id="highlights-container" {% if not highlights_visible %} style="display: none;" {% endif %}>
 
@@ -15,65 +14,50 @@
     <div class="row" id="highlights-container">
 
         <!-- Crypto Box -->
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="fs-5">Top 5 Cryptocurrencies</h3>
+                    <h3 class="card-title">Top 5 Cryptocurrencies</h3>
                     <!-- Crypto Box Content -->
                     <ul class="list-group">
                         {% for crypto in top_cryptos %}
                             <li class="list-group-item">{{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.price }}</li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View more</a>
+                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View Full List</a>
                 </div>
             </div>
         </div>
 
         <!-- News Box -->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="fs-5">Latest News</h3>
+                    <h3 class="card-title">Latest News</h3>
                     <!-- News Box Content -->
                     <ul class="list-group">
                         {% for news in latest_news %}
-                            <li class="list-group-item">
-                                <a href="{{ news.link }}" target="_blank">{{ news.title }}</a>
-                                <span class="badge bg-secondary">{{ news.published_date }}</span>
-                            </li>
+                            <li class="list-group-item"><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary mt-2">View more</a>
+                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary mt-2">View All News</a>
                 </div>
             </div>
         </div>
-
 
         <!-- Fear & Greed Box -->
-    <!-- Fear & Greed Box -->
-<div class="col-md-3 d-flex flex-column">
-    <div class="card flex-grow-1">
-        <div class="card-body d-flex flex-column">
-            <h3 class="card-title fs-5 align-self-start">Fear & Greed Index</h3>
-            <!-- Fear & Greed Box Content -->
-             <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
-                <div class="index-indicator" style="background-color: {{ latest_index.value|get_index_color }}; height: 100px; width: 100px; border-radius: 15px; padding: 24px; color: white">
-                    <p class="fs-3 m-0">
-                        {{ latest_index.value }}
-                    </p>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Fear & Greed Index</h3>
+                    <!-- Fear & Greed Box Content -->
+                    <p class="card-text">Latest Value: {{ latest_index.value }}</p>
+                    <a href="{% url 'fear_and_greed_index' %}" class="btn btn-outline-primary mt-2">View Full Index</a>
                 </div>
-
-             </div>
-            <div class="mt-auto align-self-start"> <!-- This div will be at the bottom -->
-                <a href="{% url 'fear_and_greed_index' %}" class="btn btn-outline-primary mt-2">View more</a>
             </div>
         </div>
-    </div>
-</div>
 
     </div>
-</div>
 </div>
 
 <!-- JavaScript to toggle visibility -->
