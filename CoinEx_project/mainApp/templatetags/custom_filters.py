@@ -4,6 +4,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def get_index_color(value):
     if value >= 1 and value <= 20:

@@ -1,24 +1,6 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
+
 *.pyc
-*.pyo
-*.pyd
-
-# Virtual environment
-venv/
-env/
-
-# Logs and databases
-*.log
-*.sqlite3
-*.db
-
-# IDE-specific files
-.idea/
-.vscode/
-CoinEx_project/.idea/
-
-# Dependency directories
-node_modules/
-__pycache__/
-dist/
+*.pyc
+*.pyc
+CoinEx_project/CoinEx_project/__pycache__/settings.cpython-312.pyc
+CoinEx_project/CoinEx_project/__pycache__/urls.cpython-312.pyc
