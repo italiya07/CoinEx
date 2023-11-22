@@ -26,29 +26,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            
-            <!-- <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
-            </li> -->
-            
-           {% if user.is_authenticated %}
-           <li  class="nav-link active" aria-current="page"  href=" "> welcome, {{user.first_name}}</li>
-             <li class="nav-item">
-               <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Logout</a>
-
-               <!-- <a class="nav-link active" aria-current="page" href="{% url 'logout' %}" {% if not user.is_authenticated %} style="pointer-events: none; color: grey;"{% endif %}>Logout</a> -->
-             </li>
-           {% else %}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'register' %}">Register</a>
             </li>
-             <li class="nav-item">
-               <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
-
-               <!-- <a class="nav-link active" aria-current="page" href="{% url 'login' %}" {% if user.is_authenticated %} style="pointer-events: none; color: white;"{% endif %}>Login</a> -->
-             </li>
-           {% endif %}
-
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href=" ">Community</a>
             </li>
@@ -84,9 +67,6 @@
         </div>
       </div>
     </nav>
-    {% block nav %}
-
-    {% endblock %}
 
     <div id="content">
         {% block content %}
