@@ -1,4 +1,5 @@
 # Create your views here.
+import requests
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
@@ -36,48 +37,81 @@ def apis(change='USD'):
         # print(e)
         return e
 
+def extract_top_gainers_and_losers(main_data, limit=5):
+    # Extract the list of cryptocurrencies from main_data
+    cryptocurrencies = main_data.get('data', [])
+
+    # Sort the cryptocurrencies based on percent_change_24h in descending order
+    sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['quote']['USD']['percent_change_24h'], reverse=True)
+
+    # Extract top gainers and losers with only required information
+    top_gainers = [
+        {
+            'name': crypto['name'],
+            'symbol': crypto['symbol'],
+            'price': round(crypto['quote']['USD']['price'], 3),
+            'percent_change_24h': round(crypto['quote']['USD']['percent_change_24h'], 3)
+        }
+        for crypto in sorted_cryptos[:limit]
+    ]
+
+    top_losers = [
+        {
+            'name': crypto['name'],
+            'symbol': crypto['symbol'],
+            'price': round(crypto['quote']['USD']['price'], 3),
+            'percent_change_24h': round(crypto['quote']['USD']['percent_change_24h'], 3)
+        }
+        for crypto in sorted_cryptos[-limit:]
+    ]
+
+    return top_gainers, top_losers
+
+def extract_recently_added(main_data, limit=5):
+    try:
+        # Extract the list of cryptocurrencies from main_data
+        cryptocurrencies = main_data.get('data', [])
+
+        # Sort the cryptocurrencies based on the date_added in descending order
+        sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['date_added'], reverse=True)
+
+        # Extract recently added cryptocurrencies with only required information
+        recently_added = [
+            {
+                'name': crypto['name'],
+                'symbol': crypto['symbol'],
+                'price': round(crypto['quote']['USD']['price'], 3),
+                'volume_24h': int(crypto['quote']['USD']['volume_24h'])
+            }
+            for crypto in sorted_cryptos[:limit]
+        ]
+
+        return recently_added
+    except Exception as e:
+        # Handle exceptions, e.g., data format issues
+        print(f"Error in processing API data: {e}")
+        return None
+
 def index(request):
 
     main_data = apis()
     print(main_data['data'])
 
-    cryptos_db = Cryptocurrency.objects.all()
+    top_gainers, top_losers = extract_top_gainers_and_losers(main_data)
 
-    # Calculate topness scores for all cryptocurrencies
-    cryptos_with_topness = [
-        (crypto, calculate_topness(crypto))
-        for crypto in cryptos_db
-    ]
-
-    # Sort cryptocurrencies based on topness scores in descending order
-    sorted_cryptos = sorted(cryptos_with_topness, key=lambda x: x[1], reverse=True)
-
-    # Retrieve top 5 cryptocurrencies
-    top_cryptos = [crypto for crypto, _ in sorted_cryptos[:5]]
-
-    # Retrieve latest 5 news based on published date
-    latest_news = News.objects.order_by('-published_date')[:5]
-
-    # Retrieve the latest Fear & Greed Index value
-    latest_index = FearAndGreedIndex.objects.latest('date')
-
-    # Set a static value for testing
-    #static_index_value = 35  # You can change this to any value for testing
+    recently_added = extract_recently_added(main_data)
 
     data = {
         "cryptos": main_data['data'],
         "currency" : 'USD',
-        "cryptos": cryptos_db,
-        "top_cryptos": top_cryptos,
-        "latest_news": latest_news,
-        #"latest_index": FearAndGreedIndex(value=static_index_value),
-        "latest_index": latest_index
+        "top_gainers": top_gainers,
+        "top_losers": top_losers,
+        "recently_added": recently_added
     }
     print("\n we are taking context\n")
     print(data)
 
     return render(request, 'CoinEx_Index/index.html', context=data)
-    # return render(request, 'CoinEx_Index/index.html', context=context)
 
 def exchange(request, currency_symbol):
 
