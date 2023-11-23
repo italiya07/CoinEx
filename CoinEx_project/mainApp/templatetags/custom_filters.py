@@ -6,15 +6,20 @@ register = template.Library()
 
 @register.filter
 def get_index_color(value):
-    if value >= 1 and value <= 20:
+    try:
+        value = int(value)  # Convert value to integer
+    except ValueError:
+        return "gray"  # Return a default color for non-integer values
+
+    if 1 <= value <= 20:
         return "red"
-    elif value >= 21 and value <= 40:
+    elif 21 <= value <= 40:
         return "#FFA07A"
-    elif value >= 41 and value <= 60:
+    elif 41 <= value <= 60:
         return "orange"
-    elif value >= 61 and value <= 80:
+    elif 61 <= value <= 80:
         return "lightgreen"
-    elif value >= 81 and value <= 100:
+    elif 81 <= value <= 100:
         return "green"
     else:
         return "gray"

@@ -1,4 +1,6 @@
 # Create your views here.
+from datetime import datetime
+
 import requests
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -81,7 +83,7 @@ def extract_recently_added(main_data, limit=5):
                 'name': crypto['name'],
                 'symbol': crypto['symbol'],
                 'price': round(crypto['quote']['USD']['price'], 3),
-                'volume_24h': int(crypto['quote']['USD']['volume_24h'])
+                'date_added': datetime.strptime(crypto['date_added'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%B %d, %Y')
             }
             for crypto in sorted_cryptos[:limit]
         ]
@@ -112,6 +114,87 @@ def index(request):
     print(data)
 
     return render(request, 'CoinEx_Index/index.html', context=data)
+
+def extract_top_cryptos_by_rank(main_data, limit=10):
+    try:
+        # Extract the list of cryptocurrencies from main_data
+        cryptocurrencies = main_data.get('data', [])
+
+        # Sort the cryptocurrencies based on the cmc_rank in ascending order
+        sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['cmc_rank'])
+
+        # Extract top cryptocurrencies based on CMC rank with only required information
+        top_cryptos = [
+            {
+                'name': crypto['name'],
+                'symbol': crypto['symbol'],
+                'price': round(crypto['quote']['USD']['price'], 3)
+            }
+            for crypto in sorted_cryptos[:limit]
+        ]
+
+        return top_cryptos
+    except Exception as e:
+        # Handle exceptions, e.g., data format issues
+        print(f"Error in processing API data: {e}")
+        return None
+
+
+def extract_trending_latest(main_data, limit=10):
+    try:
+        # Extract the list of cryptocurrencies from main_data
+        cryptocurrencies = main_data.get('data', [])
+
+        # Sort the cryptocurrencies based on the volume_24h in descending order
+        sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['quote']['USD']['volume_24h'], reverse=True)
+
+        # Extract trending latest cryptocurrencies based on volume with only required information
+        trending_latest = [
+            {
+                'name': crypto['name'],
+                'symbol': crypto['symbol'],
+                'price': round(crypto['quote']['USD']['price'], 3),
+                'volume_24h': int(crypto['quote']['USD']['volume_24h'])
+            }
+            for crypto in sorted_cryptos[:limit]
+        ]
+
+        return trending_latest
+    except Exception as e:
+        # Handle exceptions, e.g., data format issues
+        print(f"Error in processing API data: {e}")
+        return None
+
+
+def crypto_highlights(request):
+    main_data = apis()
+    top_cryptos = extract_top_cryptos_by_rank(main_data, 10)
+    top_gainers, top_losers = extract_top_gainers_and_losers(main_data, 10)
+    recently_added = extract_recently_added(main_data, 10)
+    trending_latest = extract_trending_latest(main_data, 10)
+
+    # Retrieve latest 5 news based on published date
+    latest_news = News.objects.order_by('-published_date')[:10]
+
+    # Retrieve the latest Fear & Greed Index value
+    latest_fg_index = FearAndGreedIndex.objects.latest('date')
+
+    all_fg_indexes = FearAndGreedIndex.objects.all()
+
+    # Create a context dictionary with the data
+    context = {
+        'top_cryptos': top_cryptos,
+        'top_gainers': top_gainers,
+        'top_losers': top_losers,
+        'recently_added': recently_added,
+        'trending_latest': trending_latest,
+        "latest_fg_index": latest_fg_index,
+        "latest_news": latest_news,
+        "all_fg_indexes": all_fg_indexes
+    }
+    print(context)
+    # Render the template with the context
+    return render(request, 'CoinEx_Index/crypto_highlights.html', context)
 
 def exchange(request, currency_symbol):
 
@@ -155,10 +238,6 @@ def login(request):
     else:
         form = EmailAuthenticationForm()
     return render(request, 'CoinEx_Index/login.html', {'form': form})
-
-def crypto_highlights(request):
-    all_cryptos = Cryptocurrency.objects.all()
-    return render(request, 'CoinEx_Index/crypto_highlights.html', {'all_cryptos': all_cryptos})
 
 def fear_and_greed_index(request):
     all_indexes = FearAndGreedIndex.objects.all()

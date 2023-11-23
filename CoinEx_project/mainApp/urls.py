@@ -6,8 +6,7 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('login', views.login, name='login'),
     path('exchange/<str:currency_symbol>/', views.exchange, name='exchange'),
-    # path('dashboard/', dashboard, name='dashboard'),
     path('crypto_highlights/', views.crypto_highlights, name='crypto_highlights'),
-    path('fear_and_greed/', views.fear_and_greed_index, name='fear_and_greed_index'),
-    path('news/', views.news_list, name='news_list'),
+    #path('fear_and_greed/', views.fear_and_greed_index, name='fear_and_greed_index'),
+    #path('news/', views.news_list, name='news_list'),
 ]

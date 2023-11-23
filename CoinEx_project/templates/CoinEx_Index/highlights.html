@@ -29,7 +29,6 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View more</a>
                 </div>
             </div>
         </div>
@@ -48,28 +47,34 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View more</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="fs-5"> Most Recently Added</h3>
-                    <!-- Recently Added Box Content -->
-                    <ul class="list-group">
-                        {% for stock in recently_added %}
-                            <li class="list-group-item">
-                                {{ stock.name }} ({{ stock.symbol }}):
-                                ${{ stock.price }} (Volume: {{ stock.volume_24h }})
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View more</a>
-                </div>
-            </div>
+<div class="col-md-4">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="fs-5"> Most Recently Added</h3>
+            <!-- Recently Added Box Content -->
+            <ul class="list-group">
+                {% for stock in recently_added %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ stock.name }} ({{ stock.symbol }}): ${{ stock.price }}
+                        </span>
+                        <span class="badge bg-secondary">
+                            {{ stock.date_added }}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
+    </div>
+</div>
 
+
+        <div class="col-md-12 mt-2">
+            <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary">View more</a>
+        </div>
     </div>
 </div>
 </div>
