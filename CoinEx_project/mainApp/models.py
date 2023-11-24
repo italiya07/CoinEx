@@ -14,7 +14,7 @@ class News(models.Model):
     link = models.URLField()
     published_date = models.DateField(default=date.today)
     def __str__(self):
-        return self.title
+        return f'{self.title} - {self.published_date}'
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
