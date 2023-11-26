@@ -1,3 +1,4 @@
+{% load static %}
 {% load custom_filters %}
 
 <!-- Container for Highlights Section with Toggle Switch -->
@@ -25,7 +26,9 @@
                             <li class="list-group-item">
                                 {{ gainer.name }} ({{ gainer.symbol }}):
                                 ${{ gainer.price }}
-                                ({{ gainer.percent_change_24h }}%)
+                                <span class="percentage-change">
+                                    ({{ gainer.percent_change_24h }}%)
+                                </span>
                             </li>
                         {% endfor %}
                     </ul>
@@ -50,6 +53,7 @@
                 </div>
             </div>
         </div>
+
 <div class="col-md-4">
     <div class="card">
         <div class="card-body">
