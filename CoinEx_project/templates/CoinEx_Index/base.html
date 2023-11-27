@@ -13,15 +13,17 @@
     <!-- Bootstrap CSS v5.0.2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+    <link href="{% static 'mainApp/core.css'%}" rel="stylesheet"> 
 
-    {% block head %}
+    {%block dostyle %}
+
     {% endblock %}
 
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand " href="#">CoinEx</a>
+        <a class="navbar-brand " href="{% url 'index' %}">CoinEx</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -50,9 +52,7 @@
              </li>
            {% endif %}
 
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href=" ">Community</a>
-            </li>
+            
             <!-- <li class="nav-item">
               <a class="nav-link active" aria-current="page" href=" ">Exchange</a>
             </li> -->
@@ -74,9 +74,20 @@
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
             </li>
+            {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              <a class="nav-link active" aria-current="page" href=" ">Buy/Sale</a>
             </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link disabled" href=" " tabindex="-1" aria-disabled="true">Buy/Sale</a>
+            </li>
+            {% endif %}
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'contact_us' %}">Contact Us</a>
+            </li>
+            
           </ul>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
