@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -6,14 +6,14 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class FearAndGreedIndex(models.Model):
     date = models.DateField()
     value = models.IntegerField()
-    def __str__(self):
+    def _str_(self):
         return f'{self.date} - {self.value}'
 
 class News(models.Model):
     title = models.CharField(max_length=500)
     link = models.URLField()
     published_date = models.DateField(default=date.today)
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class CustomUserManager(BaseUserManager):
@@ -63,7 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # User._meta.get_field('groups').related_query_name = 'mainApp_user_groups'
     # User._meta.get_field('user_permissions').related_query_name = 'mainApp_user_permissions'
 
-    def __str__(self):
+    def _str_(self):
         return self.email
 
 
@@ -79,6 +79,14 @@ class Cryptocurrency(models.Model):
     volume = models.BigIntegerField()
     launch_date = models.DateField(null=True, blank=True, default=date.today)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
+class ContactUs(models.Model):
+    customer_name = models.CharField(max_length=200)
+    customer_email = models.CharField(max_length=200)
+    query = models.TextField()
+    created_at = models.DateTimeField(null=True, blank=True, default=datetime.now())
+
+    def _str_(self):
+        return f'{self.customer_name} - {self.created_at}'
