@@ -1,35 +1,21 @@
-{#{% extends 'CoinEx_Index/base.html' %}#}
+{% extends 'CoinEx_Index/base.html' %}
 {% load static %}
 
-{% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style/core.css' %}">
-{% endblock %}
-{% block body %}
-<div class="form-container">
-    <h2>Login</h2>
+{% block content %}
+<div class="form-style-10">
+    <h1>Log In</h1>
     <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="{{ form.username.id_for_label }}">Email:</label>
-            {{ form.username }}
-{#            {% for error in form.username.errors %}#}
-{#                <p class="error-message">{{ error }}</p>#}
-{#            {% endfor %}#}
+        {% csrf_token %} {{ form.non_field_errors | safe }}
+        <div class="section"><span>1</span>User Details</div>
+        <div class="inner-wrap">
+            <label for="{{ form.username.id_for_label }}">Your Email 
+                <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" />
+            </label>
+            <label for="{{ form.password.id_for_label }}">Password {{ form.password.errors | safe }}
+                <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" />
+            </label>           
         </div>
 
-        <div class="form-group">
-            <label for="{{ form.password.id_for_label }}">Password:</label>
-            {{ form.password }}
-{#            {% for error in form.password.errors %}#}
-{#                <p class="error-message">{{ error }}</p>#}
-{#            {% endfor %}#}
-        </div>
-
-        {% if form.errors %}
-            {{ form.non_field_errors }}
-{#            {{ form.username.error_messages }}#}
-{#            {{ form.password.error_messages }}#}
-        {% endif %}
         {% if next %}
             {% if user.is_authenticated %}
                 <p>Your account doesn't have access to this page. To proceed,
@@ -38,10 +24,15 @@
                 <p>Please login to see this page.</p>
             {% endif %}
         {% endif %}
-
-        <button type="submit">Login</button>
-        <input type="hidden" name="next" value="{{ next }}">
+    
+        
+        <div class="button-section">
+         <input type="submit" />
+         <input type="hidden" name="next" value="{{ next }}">
+        </div>
     </form>
-    <p class="register-link">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
-</div>
-{% endblock %}
+    </div>
+
+    {% endblock %}
+
+
