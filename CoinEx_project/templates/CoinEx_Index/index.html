@@ -1,10 +1,12 @@
 {% extends 'CoinEx_Index/../base.html' %}
 
 {% block content %}
-    {% block highlightsView %}
-         {% include 'CoinEx_Index/highlights.html' %}
-    {% endblock %}
-    {% block cryptoListView %}
-         {% include 'CoinEx_Index/cryptoList.html' %}
-    {% endblock %}
+{% block highlightsView %}
+{% include 'CoinEx_Index/highlights.html' %}
+{% endblock %}
+{% block cryptoListView %}
+{% include 'CoinEx_Index/cryptoList.html' %}
+{% endblock %}
+
+
 {% endblock %}

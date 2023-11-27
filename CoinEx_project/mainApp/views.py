@@ -5,12 +5,13 @@ import requests
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from .models import FearAndGreedIndex, News, Cryptocurrency
-from .forms import CustomUserForm, EmailAuthenticationForm
+from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs
+from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 from requests import Request, Session
@@ -248,6 +249,32 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect("/")
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Save the form data to the database
+            contact_submission = ContactUs(
+                customer_name=form.cleaned_data['user_name'],
+                customer_email=form.cleaned_data['email'],
+                query=form.cleaned_data['query'],
+                created_at = datetime.now()
+            )
+            contact_submission.save()
+            return HttpResponse('contact_success')  # Redirect to a success page
+    else:
+        form = ContactForm()
+
+    return render(request, 'CoinEx_Index/contact_us2.html', {'form': form})
+
+
+def crypto_highlights(request):
+    all_cryptos = Cryptocurrency.objects.all()
+    return render(
+        request, "CoinEx_Index/crypto_highlights.html", {"all_cryptos": all_cryptos}
+    )
 
 
 def fear_and_greed_index(request):

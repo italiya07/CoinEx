@@ -1,0 +1,41 @@
+{% extends 'CoinEx_Index/base.html' %}
+{% load static %}
+
+<!-- {%block dostyle %}
+<link href="{% static 'mainApp/core.css'%}" rel="stylesheet">
+{% endblock %} -->
+
+{% block content %}
+<div class="form-style-10">
+    <h1>Contact Us Here!!</h1>
+    <form method="post" action="{% url 'contact_us' %}">
+        {% csrf_token %}
+        <div class="section"><span>1</span>User Details</div>
+        <div class="inner-wrap">
+            <label for="{{ form.user_name.id_for_label }}">Your Full Name
+                <input type="text" name="{{ form.user_name.name }}" id="{{ form.user_name.id_for_label }}" />
+            </label>
+            <label for="{{ form.email.id_for_label }}">Your Email
+                <input type="text" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" />
+            </label>
+
+        </div>
+
+        <div class="section"><span>2</span>Ask Your Question Here!</div>
+        <div class="inner-wrap">
+            <label for="{{ form.query.id_for_label }}">Question
+                <textarea name="{{ form.query.name }}" id="{{ form.query.id_for_label }}"></textarea>
+            </label>
+        </div>
+
+
+        <div class="button-section">
+            <input type="submit" />
+            <!-- <span class="privacy-policy">
+         <input type="checkbox" name="field7">You agree to our Terms and Policy. 
+         </span> -->
+        </div>
+    </form>
+</div>
+
+{% endblock %}

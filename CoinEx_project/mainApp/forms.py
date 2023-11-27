@@ -42,3 +42,9 @@ class CustomUserChangeForm(UserChangeForm):
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(widget=forms.TextInput(attrs={"autofocus": True}))
+
+
+class ContactForm(forms.Form):
+    user_name = forms.CharField(max_length=100, label='Your Name')
+    email = forms.EmailField(label='Your Email')
+    query = forms.CharField(widget=forms.Textarea, label='Your Query')
