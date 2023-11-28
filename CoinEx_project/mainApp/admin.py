@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Cryptocurrency, ContactUs
+from .models import User, Cryptocurrency, ContactUs, Transaction
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -56,3 +56,4 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Cryptocurrency)
 admin.site.register(ContactUs)
+admin.site.register(Transaction)
