@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load custom_filters %}
 
 {% block content %}
@@ -16,7 +17,9 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="fs-5">Top Cryptocurrencies</h3>
+                        <h3 class="fs-5">Top Cryptocurrencies
+                        <img src="{% static 'icons/icons8-rank-16.png' %}" alt="icon" class="icon">
+                        </h3>
                         <ul class="list-group">
                             {% for crypto in top_cryptos %}
                                 <li class="list-group-item">
@@ -31,11 +34,18 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="fs-5">Top Gainers</h3>
+                        <h3 class="fs-5">
+                        Top 5 Gainers
+                            <img src="{% static 'icons/icons8-positive-dynamic-16.png' %}" alt="icon" class="icon">
+                        </h3>
                         <ul class="list-group">
                             {% for gainer in top_gainers %}
                                 <li class="list-group-item">
-                                    {{ gainer.name }} ({{ gainer.symbol }}): ${{ gainer.price }} ({{ gainer.percent_change_24h }}%)
+                                    {{ gainer.name }} ({{ gainer.symbol }}): ${{ gainer.price }}
+                                <span class="percentage-change">
+                                    ({{ gainer.percent_change_24h }}%
+                                    <img src="{% static 'icons/icons8-up-triangle-16.png' %}" alt="icon" class="icon">)
+                                </span>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -46,11 +56,17 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="fs-5">Top Gainers</h3>
+                        <h3 class="fs-5">Top 5 Losers
+                        <img src="{% static 'icons/icons8-negative-dynamic-16.png' %}" alt="icon" class="icon">
+                        </h3>
                         <ul class="list-group">
                             {% for loser in top_losers %}
                                 <li class="list-group-item">
-                                    {{ loser.name }} ({{ loser.symbol }}): ${{ loser.price }} ({{ loser.percent_change_24h }}%)
+                                    {{ loser.name }} ({{ loser.symbol }}): ${{ loser.price }}
+                                 <span class="loser-percentage-change">
+                                    ({{ loser.percent_change_24h }}%
+                                     <img src="{% static 'icons/icons8-down-triangle-arrow-16.png' %}" alt="icon" class="icon">)
+                                </span>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -63,7 +79,9 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="fs-5"> Most Recently Added</h3>
+                    <h3 class="fs-5"> Most Recently Added
+                    <img src="{% static 'icons/icons8-time-machine-16.png' %}" alt="icon" class="icon">
+                    </h3>
                     <!-- Recently Added Box Content -->
                     <ul class="list-group">
                         {% for stock in recently_added %}
@@ -84,7 +102,9 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                     <h3 class="fs-5">Trending Latest based on Volume</h3>
+                     <h3 class="fs-5">Trending Latest based on Volume
+                     <img src="{% static 'icons/icons8-trending-16.png' %}" alt="icon" class="icon">
+                     </h3>
                     <ul class="list-group">
                         {% for trend in trending_latest %}
                             <li class="list-group-item">
@@ -101,7 +121,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="fs-5">Latest News</h3>
+                    <h3 class="fs-5">Latest News
+                    <img src="{% static 'icons/icons8-news-16.png' %}" alt="icon" class="icon">
+                    </h3>
                     <ul class="list-group">
                         {% for news in latest_news %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -122,7 +144,9 @@
                 <div class="card-body d-flex flex-row">
                     <!-- Fear & Greed Box Content -->
                     <div class="index-box">
-                        <h5 class="text-center mb-3">Latest Index</h5>
+                        <h3 class="fs-5">Fear and Grid Index
+                        <img src="{% static 'icons/icons8-stock-market-16.png' %}" alt="icon" class="icon">
+                        </h3>
                         <div class="index-indicator" style="background-color: {{ latest_fg_index.value|get_index_color }}; height: 150px; width: 150px; border-radius: 15px; padding: 24px; color: white; display: flex; justify-content: center; align-items: center;">
                             <p class="fs-3 m-0">
                                 {{ latest_fg_index.value }}
