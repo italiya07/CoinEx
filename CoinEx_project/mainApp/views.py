@@ -5,8 +5,8 @@ import requests
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT, UserHolding
-from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT, SellStockForm
+from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT, UserHolding, NFTUserHolding
+from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT, SellStockForm, SellNFTForm
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
@@ -460,12 +460,12 @@ def buy_nft(request, nft_symbol):
                 )
                 transaction.save()
 
-                # # Update user holdings
-                # holding, created = UserHolding.objects.get_or_create(
-                #     user=request.user, stock=stock
-                # )
-                # holding.quantity += quantity
-                # holding.save()
+                # Update user holdings
+                holding, created = NFTUserHolding.objects.get_or_create(
+                    user=request.user, nft=nft
+                )
+                holding.quantity += quantity
+                holding.save()
 
                 return redirect("nft-transaction-history")
             except stripe.error.CardError as e:
@@ -586,3 +586,63 @@ def user_holdings(request):
         "CoinEx_Index/user_holdings.html",
         {"user": request.user, "holdings": holdings_page, "sell_form": sell_form},
     )
+
+@login_required(login_url="/login/")
+def nftuser_holdings(request):
+    holdings = NFTUserHolding.objects.filter(user=request.user)
+    sell_form = SellNFTForm()
+    items_per_page = 10
+    paginator = Paginator(holdings, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        holdings_page = paginator.page(page)
+    except PageNotAnInteger:
+        holdings_page = paginator.page(1)
+    except EmptyPage:
+        holdings_page = paginator.page(paginator.num_pages)
+
+    if request.method == "POST":
+        sell_form = SellNFTForm(request.POST)
+
+        if sell_form.is_valid():
+            nft_symbol = sell_form.cleaned_data["nft_symbol"]
+            quantity_to_sell = sell_form.cleaned_data["quantity"]
+            nft = NFT.objects.get(symbol=nft_symbol)
+            holding = holdings.filter(nft=nft).first()
+
+            if (
+                    holding
+                    and quantity_to_sell > 0
+                    and quantity_to_sell <= holding.quantity
+            ):
+                sell_price = nft.current_price * quantity_to_sell
+
+                sell_transaction = NFTTransaction(
+                    user=request.user,
+                    nft=nft,
+                    transaction_type="SELL",
+                    quantity=quantity_to_sell,
+                    price=sell_price,
+                )
+                sell_transaction.save()
+
+                holding.quantity -= quantity_to_sell
+                holding.save()
+
+
+                if holding.quantity == 0:
+                    holding.delete()
+
+                return redirect("nft-user-holdings")
+            else:
+                error_message = (
+                    "Invalid quantity to sell. Please select a valid quantity."
+                )
+                sell_form.add_error("quantity", error_message)
+    return render(
+        request,
+        "CoinEx_Index/nftuserholding.html",
+        {"user": request.user, "holdings": holdings_page, "sell_form": sell_form},
+    )
+
