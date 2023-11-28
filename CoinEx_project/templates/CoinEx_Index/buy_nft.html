@@ -1,4 +1,4 @@
-{% block title %}Buy Stock{% endblock %}
+{% block title %}Buy NFTs{% endblock %}
 {% load static %}
 <script src="https://js.stripe.com/v3/"></script>
 
@@ -124,7 +124,7 @@
         // Update total price dynamically based on quantity
         document.getElementById('id_quantity').addEventListener('input', function () {
             var quantity = parseInt(this.value);
-            var currentPrice = parseFloat('{{ crypto.price }}');
+            var currentPrice = parseFloat('{{ nft.price }}');
             var totalPrice = isNaN(quantity) ? 0 : quantity * currentPrice;
             document.getElementById('total_price').value = '$' + totalPrice.toFixed(2);
         });
