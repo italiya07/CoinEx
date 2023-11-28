@@ -1,0 +1,49 @@
+{% block title %}User Holding{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        {% if holdings %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Stock</th>
+                        <th>Company</th>
+                        <th>Current Price</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for holding in holdings %}
+                        <tr>
+                            <td><img src="{{ holding.crypto.image.url }}" alt="{{ holding.crypto.symbol }}" width="30"
+                                     height="30"> {{ holding.crypto.name }} ({{ holding.crypto.symbol }})
+                            </td>
+                            <td>{{ holding.crypto.name }}</td>
+                            <td>{{ holding.crypto.price }}</td>
+                            <td>{{ holding.quantity }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#sellModel{{ holding.crypto.id }}">
+                                    <i class="bi bi-cash"></i> Sell
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Sell Modal -->
+                        <div class="modal fade " id="sellModel{{ holding.crypto.id }}" tabindex="-1"
+                             aria-labelledby="sellModalLabel" aria-hidden="true">
+                            <!-- ... (rest of your modal code) ... -->
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination justify-content-center mb-5">
+                <!-- ... (pagination code) ... -->
+            </div>
+        {% else %}
+            <p class="fw-bold text-primary mb-5" style="font-size: 40px">No current holdings</p>
+        {% endif %}
+    </div>
+{% endblock %}

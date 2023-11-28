@@ -5,8 +5,8 @@ import requests
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT
-from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT
+from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT, UserHolding
+from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT, SellStockForm
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
@@ -348,12 +348,12 @@ def buy_stock(request, stock_symbol):
                 )
                 transaction.save()
 
-                # # Update user holdings
-                # holding, created = UserHolding.objects.get_or_create(
-                #     user=request.user, stock=stock
-                # )
-                # holding.quantity += quantity
-                # holding.save()
+                # Update user holdings
+                holding, created = UserHolding.objects.get_or_create(
+                    user=request.user, crypto=crypto
+                )
+                holding.quantity += quantity
+                holding.save()
 
                 return redirect("transaction-history")
             except stripe.error.CardError as e:
@@ -535,3 +535,54 @@ def nfttransaction_history(request):
         {"transactions": transactions, "form": form},
     )
 
+@login_required(login_url="/login/")
+def user_holdings(request):
+    holdings = UserHolding.objects.filter(user=request.user)
+    sell_form = SellStockForm()
+    items_per_page = 10
+    paginator = Paginator(holdings, items_per_page)
+    page = request.GET.get("page")
+    try:
+        holdings_page = paginator.page(page)
+    except PageNotAnInteger:
+        holdings_page = paginator.page(1)
+    except EmptyPage:
+        holdings_page = paginator.page(paginator.num_pages)
+    if request.method == "POST":
+        sell_form = SellStockForm(request.POST)
+        if sell_form.is_valid():
+            stock_symbol = sell_form.cleaned_data["stock_symbol"]
+            quantity_to_sell = sell_form.cleaned_data["quantity"]
+            stock = Cryptocurrency.objects.get(symbol=stock_symbol)
+            holding = holdings.filter(stock=stock).first()
+            if (
+                holding
+                and quantity_to_sell > 0
+                and quantity_to_sell <= holding.quantity
+            ):
+                sell_price = stock.current_price * quantity_to_sell
+                sell_transaction = Transaction(
+                    user=request.user,
+                    stock=stock,
+                    transaction_type="Sell",
+                    quantity=quantity_to_sell,
+                    price=sell_price,
+                )
+                sell_transaction.save()
+                holding.quantity -= quantity_to_sell
+                holding.save()
+                request.user.wallet += Decimal(sell_price)
+                request.user.save()
+                if holding.quantity == 0:
+                    holding.delete()
+                return redirect("user-holdings")
+            else:
+                error_message = (
+                    "Invalid quantity to sell. Please select a valid quantity."
+                )
+                sell_form.add_error("quantity", error_message)
+    return render(
+        request,
+        "CoinEx_Index/user_holdings.html",
+        {"user": request.user, "holdings": holdings_page, "sell_form": sell_form},
+    )

@@ -125,3 +125,12 @@ class NFTTransaction(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.transaction_type}{self.quantity} {self.crypto.symbol} @ {self.price}"
+
+
+
+class UserHolding(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    crypto = models.ForeignKey(Cryptocurrency, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    def __str__(self):
+        return f"{self.user.email} - {self.quantity} {self.crypto.symbol}"

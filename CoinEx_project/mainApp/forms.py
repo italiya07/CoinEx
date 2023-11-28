@@ -110,3 +110,12 @@ class BuyNFT(forms.Form):
         widget=forms.NumberInput(attrs={"class": "form-control"}),
     )
     stripeToken = forms.CharField(widget=forms.HiddenInput())
+
+
+class SellStockForm(forms.Form):
+    quantity = forms.IntegerField(
+        min_value=1,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+    stock_symbol = forms.CharField(widget=forms.HiddenInput())
