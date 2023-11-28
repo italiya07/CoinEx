@@ -1,0 +1,133 @@
+{% block title %}Buy Stock{% endblock %}
+{% load static %}
+<script src="https://js.stripe.com/v3/"></script>
+
+{% block extraHead %}
+{% endblock %}
+
+{% block content %}
+
+    <form method="post">
+        <div class="row px-lg-5">
+            <div class="col-md-6">
+                {% csrf_token %}
+                {{ form.quantity.errors }}
+                <div class="container">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="card-title text-primary fw-bold ">Crypto Details</h3>
+                            <p class="card-text"><strong>Crypto Name:</strong> {{ crypto.name }}</p>
+                            <p class="card-text"><strong>Symbol:</strong> {{ crypto.symbol }}</p>
+                            <p class="card-text"><strong>Current Price:</strong> ${{ crypto.price }}</p>
+                            <input type="hidden" name="stock_symbol" value="{{ crypto.symbol }}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="id_quantity" class="fw-bold text-dark fs-5">Quantity to Buy:</label>
+                        {{ form.quantity }}
+                        <input type="hidden" name="stock_symbol" value="{{ Cryptocurrency.symbol  }}">
+
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="total_price" class="fw-bold text-dark fs-5">Total Price:</label>
+                        <input type="text" class="form-control" id="total_price" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="mb-2 text-primary fw-bold" style="font-size: 28px" for="card-element">Card Information:</label>
+                <!-- <div class="row mb-3">
+                    <div class="col-sm-1">
+                        <img style="width: 50px" alt="payment-1" src="{% static 'images/payment-1.png' %}">
+                    </div>
+                    <div class="col-sm-1">
+                        <img style="width: 50px" alt="payment-2" src="{% static 'images/payment-2.png' %}">
+                    </div>
+                    <div class="col-sm-1">
+                        <img style="width: 50px" alt="payment-3" src="{% static 'images/payment-3.png' %}">
+                    </div>
+                    <div class="col-sm-1">
+                        <img style="width: 50px" alt="payment-4" src="{% static 'images/payment-4.png' %}">
+                    </div>
+                </div> -->
+                <div id="card-element" class="d-flex flex-column">
+                    <!-- A Stripe Element will be inserted here. -->
+                </div>
+                <!-- Used to display form errors. -->
+                <div id="card-errors" role="alert"></div>
+                {{ form.stripeToken }}
+                <button class="btn btn-primary mt-3" type="submit"><i class="bi bi-cart"></i> Buy</button>
+            </div>
+        </div>
+    </form>
+
+ <!-- Separate script tag for Stripe -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    var stripe = Stripe('{{ PUBLIC_KEY }}');
+    var elements = stripe.elements();
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var card = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    fontFamily: 'Arial, sans-serif',
+                },
+            }
+        });
+
+        // Add an instance of the card Element into the `card-element` div.
+        card.mount('#card-element');
+
+        // Handle real-time validation errors from the card Element.
+        card.addEventListener('change', function (event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Create a token when the form is submitted.
+        var form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+            console.log("Manav");
+            event.preventDefault();
+            var errorElement = document.getElementById('card-errors');
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    // Display the error to the user
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Reset any previous error messages
+                    errorElement.textContent = '';
+
+                    // Send the token to your server
+                    var stripeToken = document.querySelector('input[name="stripeToken"]');
+                    stripeToken.value = result.token.id;
+
+                    // Submit the form
+                    form.submit();
+                }
+            }).catch(function (error) {
+                // Handle other errors that may occur during the token creation process
+                console.error('An error occurred:', error);
+                errorElement.textContent = 'An error occurred while processing your request. Please try again.';
+            });
+        });
+
+        // Update total price dynamically based on quantity
+        document.getElementById('id_quantity').addEventListener('input', function () {
+            var quantity = parseInt(this.value);
+            var currentPrice = parseFloat('{{ crypto.price }}');
+            var totalPrice = isNaN(quantity) ? 0 : quantity * currentPrice;
+            document.getElementById('total_price').value = '$' + totalPrice.toFixed(2);
+        });
+    });
+</script>
+{% endblock %}

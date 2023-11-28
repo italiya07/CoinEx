@@ -1,0 +1,89 @@
+{% block title %}Transaction{% endblock %}
+{% load static %}
+{% block extraHead %}<style>
+    .errorlist.nonfield {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+        list-style: none;
+    }
+    #id_transaction_type {
+        padding: 8px;
+    }
+    label{
+        color:#111111;
+        font-weight: bold;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+</style>{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="get" class="mb-3">
+        <div class="mb-2 d-flex justify-content-between flex-wrap my-2">
+
+            {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                </div>
+            {% endfor %}
+        {{ form.non_field_errors }}
+        </div>
+            <button type="submit" class="btn btn-primary ">Filter <i class="bi bi-funnel"></i></button>
+   <a href="{% url 'transaction-history' %}" class="btn btn-secondary">Clear</a>
+        </form>
+        {% if transactions %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Stock</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <th>{% if transaction.transaction_type == 'Buy' %}<i class="bi bi-cart mx-1"></i> {% else %}
+                                <i class="bi bi-cash mx-1"></i>{% endif %}{{ transaction.transaction_type }}</th>
+                            <th>{{ transaction.timestamp }}</th>
+                            <th><img src="{{ transaction.stock.image.url }}" alt="{{ transaction.stock.symbol }}"
+                                     width="30"
+                                     height="30"> {{ transaction.stock }}</th>
+                            <th>{{ transaction.quantity }}</th>
+                            <th>{{ transaction.price }}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination justify-content-center mb-5">
+                <span class="step-links ">
+                    {% if transactions.has_previous %}
+                        <a href="?page=1" class="btn btn-primary mx-2">&laquo; first</a>
+                        <a href="?page={{ transactions.previous_page_number }}"
+                           class="btn btn-primary mx-2">previous</a>
+                    {% endif %}
+
+                    <span class="current fw-bold">
+                        Page {{ transactions.number }} of {{ transactions.paginator.num_pages }}.
+                    </span>
+
+                    {% if transactions.has_next %}
+                        <a href="?page={{ transactions.next_page_number }}" class="btn btn-primary mx-2">next</a>
+                        <a href="?page={{ transactions.paginator.num_pages }}"
+                           class="btn btn-primary mx-2">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            <p class="fw-bold text-primary mb-5" style="font-size: 40px">No transaction history available</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

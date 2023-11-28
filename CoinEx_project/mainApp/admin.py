@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Cryptocurrency
+from .models import User, Cryptocurrency, ContactUs, Transaction, NFT
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -55,5 +55,6 @@ class CustomUserAdmin(UserAdmin):
 # Register the CustomUser model with the admin site
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Cryptocurrency)
-
-
+admin.site.register(ContactUs)
+admin.site.register(Transaction)
+admin.site.register(NFT)

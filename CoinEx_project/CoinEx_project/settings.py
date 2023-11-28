@@ -139,3 +139,6 @@ MEDIA_URL = "/media/"
 
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+STRIPE_PUBLIC_KEY = "pk_test_51OEx8aKe129QqCJpnFq28V5d9Fr2yW9m6WRlmFbCGXBD76cTmxQ9x6EncAIncsbWDDu1EMWd0hB06ycaFC74sl4O00xNhKpdzc"
+STRIPE_PRIVATE_KEY = "sk_test_51OEx8aKe129QqCJpwk7GyDxGrqPDBP0ERORHNo5X7hhviRoomC1izQiZwpWfuXuVLK0c0zWMMthqv7ixeBbCTxKX00BwFdIIJ5"

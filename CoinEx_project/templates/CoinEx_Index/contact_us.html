@@ -1,0 +1,66 @@
+{% extends 'CoinEx_Index/base.html' %}
+{% load static %}
+
+{%block dostyle %}
+<link href="{% static 'mainApp/core.css'%}" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+
+{% endblock %}
+
+{% block content %}
+<h2>Contact Us</h2>
+
+<div class="container">
+    <form method="post" action="{% url 'contact_us' %}">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="{{ form.user_name.id_for_label }}">Your Name</label>
+            <div class="col-sm-9">
+                <input type="text" name="{{ form.user_name.name }}" class="form-control mx-sm-3"
+                    id="{{ form.user_name.id_for_label }}" placeholder="Enter your name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="{{ form.email.id_for_label }}" class="col-sm-3 col-form-label">Your Email</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control mx-sm-3" name="{{ form.email.name }}"
+                    id="{{ form.email.id_for_label }}" placeholder="Enter your email">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="{{ form.query.id_for_label }}" class="col-sm-3 col-form-label">Your Question</label>
+            <div class="col-sm-9">
+                <textarea class="form-control mx-sm-3" name="{{ form.query.name }}" id="{{ form.query.id_for_label }}"
+                    placeholder="Enter your question"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mx-sm-3">Submit</button>
+    </form>
+</div>
+<!-- <form method="post" action="{% url 'contact_us' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="form-group row">
+      <label class="col-12 col-form-label" for="{{ field.user_name }}">User_name</label>
+      <div class="col-12">
+        <input
+          type="{{ field.field.widget.input_type }}"
+          class="form-control"
+          name="{{ field.user_name }}"
+          value="{{ field.value|default:'' }}"
+        >
+      </div>
+      <div class="col-12 help-text">{{ field.help_text }} </div> 
+    </div>
+  {% endfor %} -->
+
+
+{% endblock %}

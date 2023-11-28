@@ -1,7 +1,7 @@
 {% block cryptoListView %}
-    <div class="container">
-        <table class="table table-striped">
-            <thead>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
             <tr>
                 <th>No.</th>
                 <th>Name</th>
@@ -11,58 +11,93 @@
                 <th>24h%</th>
                 <th>MarketCap</th>
                 <th>Volume</th>
+                <th>BUY</th>
             </tr>
-            </thead>
-            <tbody> {% for crypto in cryptos %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ crypto.name }}</td>
-                    <td>{{ crypto.symbol }}</td>
-                    {% if currency == 'USD' %}
-                        <td>{{ crypto.quote.USD.price }}  USD</td>
-                        <td class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.USD.market_cap }}  USD</td>
-                        <td>{{ crypto.quote.USD.volume_24h }}  USD</td>
-                    {% elif currency == 'ARS' %}
-                        <td>{{ crypto.quote.ARS.price }}  ARS</td>
-                        <td class="{% if crypto.quote.ARS.percent_change_1h == -1 %}text-danger{% elif crypto.quote.ARS.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.ARS.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.ARS.percent_change_24h == -1 %}text-danger{% elif crypto.quote.ARS.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.ARS.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.ARS.market_cap }}  ARS</td>
-                        <td>{{ crypto.quote.ARS.volume_24h }}  ARS</td>
-                    {% elif currency == 'INR' %}
-                        <td>{{ crypto.quote.INR.price }}  INR</td>
-                        <td class="{% if crypto.quote.INR.percent_change_1h == -1 %}text-danger{% elif crypto.quote.INR.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.INR.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.INR.percent_change_24h == -1 %}text-danger{% elif crypto.quote.INR.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.INR.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.INR.market_cap }}  INR</td>
-                        <td>{{ crypto.quote.INR.volume_24h }}  INR</td>
-                    {% elif currency == 'AUD' %}
-                        <td>{{ crypto.quote.AUD.price }}  AUD</td>
-                        <td class="{% if crypto.quote.AUD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.AUD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.AUD.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.AUD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.AUD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.AUD.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.AUD.market_cap }}  AUD</td>
-                        <td>{{ crypto.quote.AUD.volume_24h }}  AUD</td>
-                    {% elif currency == 'EUR' %}
-                        <td>{{ crypto.quote.USD.price }}  USD</td>
-                        <td class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h > 0 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h > 0 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.USD.market_cap }}  USD</td>
-                        <td>{{ crypto.quote.USD.volume_24h }}  USD</td>
-                    {% elif currency == 'RUB' %}
-                        <td>{{ crypto.quote.USD.price }}  USD</td>
-                        <td class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.USD.market_cap }}  USD</td>
-                        <td>{{ crypto.quote.USD.volume_24h }}  USD</td>
+        </thead>
+        <tbody> {% for crypto in cryptos %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ crypto.name }}</td>
+                <td>{{ crypto.symbol }}</td>
+                {% if currency == 'USD' %}
+                <td>{{ crypto.quote.USD.price }} USD</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.USD.market_cap }} USD</td>
+                <td>{{ crypto.quote.USD.volume_24h }} USD</td>
+                {% elif currency == 'ARS' %}
+                <td>{{ crypto.quote.ARS.price }} ARS</td>
+                <td
+                    class="{% if crypto.quote.ARS.percent_change_1h == -1 %}text-danger{% elif crypto.quote.ARS.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.ARS.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.ARS.percent_change_24h == -1 %}text-danger{% elif crypto.quote.ARS.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.ARS.percent_change_24h }}</td>
+                <td>{{ crypto.quote.ARS.market_cap }} ARS</td>
+                <td>{{ crypto.quote.ARS.volume_24h }} ARS</td>
+                {% elif currency == 'INR' %}
+                <td>{{ crypto.quote.INR.price }} INR</td>
+                <td
+                    class="{% if crypto.quote.INR.percent_change_1h == -1 %}text-danger{% elif crypto.quote.INR.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.INR.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.INR.percent_change_24h == -1 %}text-danger{% elif crypto.quote.INR.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.INR.percent_change_24h }}</td>
+                <td>{{ crypto.quote.INR.market_cap }} INR</td>
+                <td>{{ crypto.quote.INR.volume_24h }} INR</td>
+                {% elif currency == 'AUD' %}
+                <td>{{ crypto.quote.AUD.price }} AUD</td>
+                <td
+                    class="{% if crypto.quote.AUD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.AUD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.AUD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.AUD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.AUD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.AUD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.AUD.market_cap }} AUD</td>
+                <td>{{ crypto.quote.AUD.volume_24h }} AUD</td>
+                {% elif currency == 'EUR' %}
+                <td>{{ crypto.quote.USD.price }} USD</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h > 0 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h > 0 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.USD.market_cap }} USD</td>
+                <td>{{ crypto.quote.USD.volume_24h }} USD</td>
+                {% elif currency == 'RUB' %}
+                <td>{{ crypto.quote.USD.price }} USD</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.USD.market_cap }} USD</td>
+                <td>{{ crypto.quote.USD.volume_24h }} USD</td>
 
-                    {% else %}
-                        <td>{{ crypto.quote.USD.price }}  USD</td>
-                        <td class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h > 0 %}text-success{% else %}text-success{% endif %}">{{ crypto.quote.USD.percent_change_1h }}</td>
-                        <td class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h > 0 %}text-success{% else %}text-muted{% endif %}">{{ crypto.quote.USD.percent_change_24h }}</td>
-                        <td>{{ crypto.quote.USD.market_cap }}  USD</td>
-                        <td>{{ crypto.quote.USD.volume_24h }}  USD</td>
-                    {% endif %}
-                    
-                </tr> {% endfor %} </tbody>
-        </table>
-    </div> {% endblock %}
+                {% else %}
+                <td>{{ crypto.quote.USD.price }} USD</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h > 0 %}text-success{% else %}text-success{% endif %}">
+                    {{ crypto.quote.USD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h > 0 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.USD.market_cap }} USD</td>
+                <td>{{ crypto.quote.USD.volume_24h }} USD</td>
+                {% endif %}
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+
+            </tr> {% endfor %}
+        </tbody>
+    </table>
+</div> {% endblock %}
