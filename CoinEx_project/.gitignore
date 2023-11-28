@@ -25,3 +25,5 @@ CoinEx_project/.idea/
 node_modules/
 __pycache__/
 dist/
+
+#test
