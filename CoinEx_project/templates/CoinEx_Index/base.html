@@ -70,15 +70,11 @@
               <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='USD' %}">USD</a></li>
               <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='INR' %}">INR</a></li>
               <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='AUD' %}">AUD</a></li>
-              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='EUR' %}">EUR</a></li>
-              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='PHP' %}">PHP</a></li>
-              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='MYR' %}">MYR</a></li>
-              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='RUB' %}">RUB</a></li>
+              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='GBP' %}">GBP</a></li>
+              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='IDR' %}">IDR</a></li>
+              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='KRW' %}">KRW</a></li>
+              <li><a class="dropdown-item" href="{% url 'exchange' currency_symbol='TRY' %}">TRY</a></li>
 
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
           {% if user.is_authenticated %}
@@ -91,7 +87,7 @@
           </li>
           {% endif %}
 
-
+          {% if user.is_authenticated %}
          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -100,10 +96,16 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="{% url 'transaction-history' %}">Crypto Transaction History</a></li>
               <li><a class="dropdown-item" href="{% url 'nft-transaction-history' %}">NFT Transaction History</a></li>
-
-
             </ul>
           </li>
+          {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false" aria-disabled="true">
+              Transaction History
+            </a>
+          </li>
+          {% endif %}
 
 
           <li class="nav-item">

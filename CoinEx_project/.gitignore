@@ -13,6 +13,9 @@ env/
 *.sqlite3
 *.db
 
+db.sqlite3
+migrations/
+
 # IDE-specific files
 .idea/
 .vscode/
