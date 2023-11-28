@@ -317,9 +317,14 @@ def calculate_topness(crypto):
 
 
 @login_required(login_url="/login/")
-def buy_stock(request, stock_symbol):
+def buy_stock(request, stock_symbol, price):
     error_message = ""
     crypto = Cryptocurrency.objects.get(symbol=stock_symbol)
+
+    new_price_type = type(crypto.price)
+    new_price_val = new_price_type(price)
+    crypto.price = new_price_val
+
     if request.method == "POST":
         form = BuyCrypto(request.POST)
 
