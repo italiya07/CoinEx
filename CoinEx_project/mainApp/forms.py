@@ -119,3 +119,12 @@ class SellStockForm(forms.Form):
         widget=forms.NumberInput(attrs={"class": "form-control"}),
     )
     stock_symbol = forms.CharField(widget=forms.HiddenInput())
+
+
+class SellNFTForm(forms.Form):
+    quantity = forms.IntegerField(
+        min_value=1,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+    nft_symbol = forms.CharField(widget=forms.HiddenInput())

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Cryptocurrency, ContactUs, Transaction, NFT
+from .models import User, Cryptocurrency, ContactUs, Transaction, NFT, NFTUserHolding, NFTTransaction
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -57,4 +57,6 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Cryptocurrency)
 admin.site.register(ContactUs)
 admin.site.register(Transaction)
+admin.site.register(NFTUserHolding)
+admin.site.register(NFTTransaction)
 admin.site.register(NFT)
