@@ -17,5 +17,6 @@ urlpatterns = [
     path('nfts/', views.nft_list, name='nft_list'),
     path('buy_nft/<str:nft_symbol>/', views.buy_nft, name='buy_nft'),
     path('nfttransactionhistory/', views.nfttransaction_history, name='nft-transaction-history'),
-    path("user-holdings/", views.user_holdings, name="user-holdings"),
+    path('user-holdings/', views.user_holdings, name='user-holdings'),
+    path('nft-user-holdings/', views.nftuser_holdings, name='nft-user-holdings'),
 ]
