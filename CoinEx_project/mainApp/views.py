@@ -5,8 +5,9 @@ import requests
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction
-from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm
+from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT
+from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth.models import auth
@@ -419,6 +420,118 @@ def transaction_history(request):
     return render(
         request,
         "CoinEx_Index/transactionhistory.html",
+        {"transactions": transactions, "form": form},
+    )
+
+def nft_list(request):
+    nfts = NFT.objects.all()
+    return render(request, 'CoinEx_Index/nft_list.html', {'nfts': nfts})
+
+
+@login_required(login_url="/login/")
+def buy_nft(request, nft_symbol):
+    error_message = ""
+    nft = NFT.objects.get(symbol=nft_symbol)
+    if request.method == "POST":
+        form = BuyNFT(request.POST)
+
+        if form.is_valid():
+            quantity = form.cleaned_data["quantity"]
+            nft = nft
+            total_price = nft.price * quantity  # Calculate total price
+
+            # Handle Stripe payment
+            token = form.cleaned_data["stripeToken"]
+            try:
+                charge = stripe.Charge.create(
+                    amount=int(total_price * 100),  # Amount in cents
+                    currency="cad",
+                    source=token,
+                    description=f"NFT Purchase: {nft_symbol}",
+                )
+
+                # Record the transaction
+                transaction = NFTTransaction(
+                    user=request.user,
+                    nft=nft,
+                    transaction_type="Buy",
+                    quantity=quantity,
+                    price=total_price,
+                )
+                transaction.save()
+
+                # # Update user holdings
+                # holding, created = UserHolding.objects.get_or_create(
+                #     user=request.user, stock=stock
+                # )
+                # holding.quantity += quantity
+                # holding.save()
+
+                return redirect("nft-transaction-history")
+            except stripe.error.CardError as e:
+                error_message = e.error.message
+                print(f"Stripe CardError: {error_message}")
+    else:
+        form = BuyCrypto()
+
+    return render(
+        request,
+        "CoinEx_Index/buy_nft.html",
+        {
+            "nft": nft,
+            "error_message": error_message,
+            "PUBLIC_KEY": STRIPE_API_KEY_PUBLIC,
+            "form": form,
+        },
+    )
+
+
+@login_required(login_url="/login/")
+def nfttransaction_history(request):
+    user = request.user
+    transactions = NFTTransaction.objects.filter(user=user).order_by("-timestamp")
+
+    if request.method == "GET":
+        form = TransactionFilterForm(request.GET)
+
+        if form.is_valid():
+            transaction_type = form.cleaned_data.get("transaction_type")
+            nft_symbol = form.cleaned_data.get("nft_symbol")
+            start_date = form.cleaned_data.get("start_date")
+            end_date = form.cleaned_data.get("end_date")
+            if start_date and end_date and start_date > end_date:
+                form.add_error(
+                    "start_date", "Start date cannot be greater than end date."
+                )
+            else:
+                if transaction_type:
+                    transaction_type = transaction_type.capitalize()
+                    transactions = transactions.filter(
+                        transaction_type=transaction_type
+                    )
+                if nft_symbol:
+                    transactions = transactions.filter(
+                        nft__symbol__icontains=nft_symbol
+                    )
+                if start_date:
+                    transactions = transactions.filter(timestamp__gte=start_date)
+                if end_date:
+                    transactions = transactions.filter(timestamp__lte=end_date)
+
+    items_per_page = 10
+    paginator = Paginator(transactions, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        transactions = paginator.page(page)
+    except PageNotAnInteger:
+        transactions = paginator.page(1)
+    except EmptyPage:
+        transactions = paginator.page(paginator.num_pages)
+    form = TransactionFilterForm(request.GET)
+    return render(
+        request,
+        "CoinEx_Index/nfttransactionhistory.html",
         {"transactions": transactions, "form": form},
     )
 

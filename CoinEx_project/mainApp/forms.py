@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User
+from .models import User, NFT
 
 
 class CustomUserForm(UserCreationForm):
@@ -96,3 +96,17 @@ class TransactionFilterForm(forms.Form):
 
         if start_date and end_date and start_date > end_date:
             raise forms.ValidationError("Start date cannot be greater than end date.")
+
+
+class NFTForm(forms.ModelForm):
+    class Meta:
+        model = NFT
+        fields = '__all__'
+
+class BuyNFT(forms.Form):
+    quantity = forms.IntegerField(
+        min_value=1,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+    stripeToken = forms.CharField(widget=forms.HiddenInput())
