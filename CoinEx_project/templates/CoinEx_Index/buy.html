@@ -1,42 +1,162 @@
-{% block title %}Buy Stock{% endblock %}
 {% load static %}
-<script src="https://js.stripe.com/v3/"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy Crypto</title>
+    <script src="https://js.stripe.com/v3/"></script>
+<style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
-{% block extraHead %}
-{% endblock %}
+    header {
+      background-color: #212529; /* Dark green color */
+      padding: 15px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-{% block content %}
+    .nav-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
 
-    <form method="post">
+    .nav-links li {
+      margin-right: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+      @media(min-width: 768px) {
+      .row {
+        display: flex;
+        justify-content: space-between;
+      }
+      .col-md-6 {
+        width: 48%; /* Adjust width as needed */
+      }
+    }
+
+    .banner {
+  padding: 1px;
+  text-align: center;
+  background: #FFBF00;
+  color: black;
+  font-size: 20px;
+}
+
+    .buy-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+}
+
+/* Style for the quantity input field */
+input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 200px;
+}
+
+/* Style for the hidden input field */
+input[type="hidden"] {
+    /* Add any specific styles if needed for the hidden input */
+    display: none; /* Hide the hidden input field */
+}
+
+.total-price-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+}
+
+.form-control {
+    width: 250px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#total_price[readonly] {
+    /* Style for readonly input */
+    background-color: #f5f5f5;
+    /* Adjust other styles as needed */
+}
+
+
+
+
+</style>
+</head>
+<body>
+<header>
+<nav>
+<ul class="nav-links">
+<li><a href="{% url 'index' %}">CoinEx</a></li>
+</ul>
+</nav>
+
+
+</header>
+<div class="banner">
+  <p><strong>Crypto Name:</strong> {{ crypto.name }}</p>
+  <p><strong>Symbol:</strong> {{ crypto.symbol }}</p>
+  <p><strong>Current Price:</strong> ${{ crypto.price }}</p>
+  <input type="hidden" name="stock_symbol" value="{{ crypto.symbol }}">
+</div>
+<form method="post">
         <div class="row px-lg-5">
             <div class="col-md-6">
                 {% csrf_token %}
                 {{ form.quantity.errors }}
                 <div class="container">
                     <div class="card mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title text-primary fw-bold ">Crypto Details</h3>
-                            <p class="card-text"><strong>Crypto Name:</strong> {{ crypto.name }}</p>
-                            <p class="card-text"><strong>Symbol:</strong> {{ crypto.symbol }}</p>
-                            <p class="card-text"><strong>Current Price:</strong> ${{ crypto.price }}</p>
-                            <input type="hidden" name="stock_symbol" value="{{ crypto.symbol }}">
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="id_quantity" class="fw-bold text-dark fs-5">Quantity to Buy:</label>
-                        {{ form.quantity }}
-                        <input type="hidden" name="stock_symbol" value="{{ Cryptocurrency.symbol  }}">
 
                     </div>
-                    <div class="form-group mb-5">
-                        <label for="total_price" class="fw-bold text-dark fs-5">Total Price:</label>
-                        <input type="text" class="form-control" id="total_price" readonly>
-                    </div>
+                    <div class="buy-section">
+                    <label for="id_quantity" class="form-label">Quantity to Buy:</label>
+                        {{ form.quantity }}
+                    <input type="hidden" name="stock_symbol" value="{{ Cryptocurrency.symbol }}">
+</div>
+
+                    <div class="form-group mb-5 total-price-section">
+    <label for="total_price" class="form-label fw-bold text-dark fs-5">Total Price:</label>
+    <input type="text" class="form-control" id="total_price" readonly>
+</div>
+
                 </div>
             </div>
             <div class="col-md-6">
                 <label class="mb-2 text-primary fw-bold" style="font-size: 28px" for="card-element">Card Information:</label>
-                <!-- <div class="row mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-1">
                         <img style="width: 50px" alt="payment-1" src="{% static 'images/payment-1.png' %}">
                     </div>
@@ -49,7 +169,7 @@
                     <div class="col-sm-1">
                         <img style="width: 50px" alt="payment-4" src="{% static 'images/payment-4.png' %}">
                     </div>
-                </div> -->
+                </div>
                 <div id="card-element" class="d-flex flex-column">
                     <!-- A Stripe Element will be inserted here. -->
                 </div>
@@ -130,4 +250,6 @@
         });
     });
 </script>
-{% endblock %}
+
+</body>
+</html>
