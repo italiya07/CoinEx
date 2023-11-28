@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT
 from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth.models import auth
@@ -533,3 +534,4 @@ def nfttransaction_history(request):
         "CoinEx_Index/nfttransactionhistory.html",
         {"transactions": transactions, "form": form},
     )
+

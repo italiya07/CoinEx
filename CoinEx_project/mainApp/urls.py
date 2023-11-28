@@ -17,5 +17,4 @@ urlpatterns = [
     path('nfts/', views.nft_list, name='nft_list'),
     path('buy_nft/<str:nft_symbol>/', views.buy_nft, name='buy_nft'),
     path('nfttransactionhistory/', views.nfttransaction_history, name='nft-transaction-history')
-
 ]
