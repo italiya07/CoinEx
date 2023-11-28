@@ -19,7 +19,10 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="fs-5">Top 5 Gainers</h3>
+                   <h3 class="fs-5">
+                        Top 5 Gainers
+                        <img src="{% static 'icons/icons8-positive-dynamic-16.png' %}" alt="icon" class="icon">
+                    </h3>
                     <!-- Top Gainers Box Content -->
                     <ul class="list-group">
                         {% for gainer in top_gainers %}
@@ -27,7 +30,8 @@
                                 {{ gainer.name }} ({{ gainer.symbol }}):
                                 ${{ gainer.price }}
                                 <span class="percentage-change">
-                                    ({{ gainer.percent_change_24h }}%)
+                                    ({{ gainer.percent_change_24h }}%
+                                    <img src="{% static 'icons/icons8-up-triangle-16.png' %}" alt="icon" class="icon">)
                                 </span>
                             </li>
                         {% endfor %}
@@ -39,14 +43,19 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="fs-5">Top 5 Losers</h3>
+                    <h3 class="fs-5">Top 5 Losers
+                    <img src="{% static 'icons/icons8-negative-dynamic-16.png' %}" alt="icon" class="icon">
+                    </h3>
                     <!-- Top Gainers Box Content -->
                     <ul class="list-group">
                         {% for loser in top_losers %}
                             <li class="list-group-item">
                                 {{ loser.name }} ({{ loser.symbol }}):
                                 ${{ loser.price }}
-                                ({{ loser.percent_change_24h }}%)
+                                 <span class="loser-percentage-change">
+                                    ({{ loser.percent_change_24h }}%
+                                     <img src="{% static 'icons/icons8-down-triangle-arrow-16.png' %}" alt="icon" class="icon">)
+                                </span>
                             </li>
                         {% endfor %}
                     </ul>
@@ -57,7 +66,9 @@
 <div class="col-md-4">
     <div class="card">
         <div class="card-body">
-            <h3 class="fs-5"> Most Recently Added</h3>
+            <h3 class="fs-5"> Most Recently Added
+            <img src="{% static 'icons/icons8-time-machine-16.png' %}" alt="icon" class="icon">
+            </h3>
             <!-- Recently Added Box Content -->
             <ul class="list-group">
                 {% for stock in recently_added %}

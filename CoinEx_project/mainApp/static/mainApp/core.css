@@ -1,0 +1,141 @@
+/* Custom Styles for Today's Highlights Section */
+
+/* Import Google Fonts (Roboto) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Apply Roboto font to the entire document */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+/* Container Styles */
+.container {
+    max-width: 100%;
+    margin: auto;
+    background-color: #ffffff; /* White container background */
+    border-radius: 10px; /* Rounded corners for the container */
+    padding: 10px; /* Add padding for content inside the container */
+}
+
+/* Heading Styles */
+.display-4 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 2.5em; /* Increase font size */
+    margin-bottom: 20px;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+/* List Group Styles */
+.list-group-item {
+    border: none;
+    margin-bottom: 8px;
+    padding: 10px;
+    background-color: #dfe6e9;
+}
+
+/* Gainers and Losers Styles */
+.fs-5 {
+    color: #3498db;
+    font-weight: bold;
+    font-size: 1.2em; /* Increase font size */
+}
+
+/* Gainers Styles */
+.percentage-change {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+/* Losers Styles */
+.loser-percentage-change {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Recently Added Styles */
+.text-secondary {
+    color: #95a5a6;
+}
+
+/* Trending Latest Styles */
+.fs-5.trending {
+    color: #e67e22;
+}
+
+/* Latest News Styles */
+.fs-5.news {
+    color: #9b59b6;
+}
+
+/* Index Box Styles */
+.index-box {
+    margin-right: 20px;
+}
+
+.index-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+/* Fear & Greed Chart Styles */
+#indexChartContainer {
+    margin-top: 20px;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+/* Optional: Adjust the colors based on your preferences */
+.index-indicator.green {
+    background-color: #2ecc71;
+}
+
+.index-indicator.red {
+    background-color: #e74c3c;
+}
+
+.index-indicator.orange {
+    background-color: #e67e22;
+}
+
+.index-indicator.purple {
+    background-color: #9b59b6;
+}
+
+/* Add margin between rows */
+.row {
+    margin-bottom: 20px;
+}
+
+/* Add responsive font sizes */
+@media screen and (max-width: 768px) {
+    .fs-4 {
+        font-size: 1.8em;
+    }
+
+    .fs-5 {
+        font-size: 1.1em;
+    }
+}
+
+.icon {
+    width: 30px; /* Adjust the width as needed */
+    height: 30px; /* Adjust the height as needed */
+    margin-left: 10px; /* Adjust the margin as needed */
+}

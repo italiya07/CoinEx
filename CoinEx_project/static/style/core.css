@@ -1,0 +1,67 @@
+/* Custom Styles for Today's Highlights Section */
+
+/* Container Styles */
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Title Styles */
+.fs-4 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Toggle Switch Styles */
+.form-switch input {
+    height: 2rem;
+    width: 4rem;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* List Group Styles */
+.list-group-item {
+    border: none;
+    background-color: #ecf0f1;
+    margin-bottom: 8px;
+    padding: 10px;
+}
+
+/* Gainers and Losers Styles */
+.fs-5 {
+    color: #3498db;
+}
+
+.percentage-change {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+/* Recently Added Styles */
+.text-secondary {
+    color: #95a5a6;
+}
+
+/* View More Button Styles */
+.btn-outline-primary {
+    border-color: #3498db;
+    color: #3498db;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3498db;
+    color: #fff;
+}
