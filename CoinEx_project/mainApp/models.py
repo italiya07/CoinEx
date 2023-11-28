@@ -79,6 +79,7 @@ class Cryptocurrency(models.Model):
     volume = models.BigIntegerField()
     launch_date = models.DateField(null=True, blank=True, default=date.today)
 
+
     def _str_(self):
         return self.name
 
@@ -90,3 +91,37 @@ class ContactUs(models.Model):
 
     def _str_(self):
         return f'{self.customer_name} - {self.created_at}'
+    
+
+class Transaction(models.Model):
+    TYPE = [("BUY", "Buy"), ("SELL", "Sell")]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    transaction_type = models.CharField(max_length=10, choices=TYPE, default="BUY")
+    quantity = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    crypto = models.ForeignKey(Cryptocurrency, on_delete=models.CASCADE)  # Assuming you have a Crypto model
+
+
+    def __str__(self):
+        return f"{self.user.email} - {self.transaction_type}{self.quantity} {self.crypto.symbol} @ {self.price}"
+
+class NFT(models.Model):
+    name = models.CharField(max_length=255)
+    symbol = models.CharField(max_length=10)
+    image = models.ImageField(upload_to="nft_images/")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    market_cap = models.DecimalField(max_digits=15, decimal_places=2)
+
+class NFTTransaction(models.Model):
+    TYPE = [("BUY", "Buy"), ("SELL", "Sell")]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    transaction_type = models.CharField(max_length=10, choices=TYPE, default="BUY")
+    quantity = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    nft = models.ForeignKey(NFT, on_delete=models.CASCADE)  # Assuming you have a Crypto model
+
+
+    def __str__(self):
+        return f"{self.user.email} - {self.transaction_type}{self.quantity} {self.crypto.symbol} @ {self.price}"

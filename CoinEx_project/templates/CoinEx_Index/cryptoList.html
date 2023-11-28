@@ -11,6 +11,7 @@
                 <th>24h%</th>
                 <th>MarketCap</th>
                 <th>Volume</th>
+                <th>BUY</th>
             </tr>
         </thead>
         <tbody> {% for crypto in cryptos %}
@@ -90,6 +91,11 @@
                 <td>{{ crypto.quote.USD.market_cap }} USD</td>
                 <td>{{ crypto.quote.USD.volume_24h }} USD</td>
                 {% endif %}
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
 
             </tr> {% endfor %}
         </tbody>
