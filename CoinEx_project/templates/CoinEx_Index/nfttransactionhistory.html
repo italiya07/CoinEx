@@ -54,9 +54,7 @@
                             <th>{% if transaction.transaction_type == 'Buy' %}<i class="bi bi-cart mx-1"></i> {% else %}
                                 <i class="bi bi-cash mx-1"></i>{% endif %}{{ transaction.transaction_type }}</th>
                             <th>{{ transaction.timestamp }}</th>
-                            <th><img src="{{ transaction.nft.image.url }}" alt="{{ transaction.nft.symbol }}"
-                                     width="30"
-                                     height="30"> {{ transaction.nft }}</th>
+                            <th>{{ transaction.nft.name }}</th>
                             <th>{{ transaction.quantity }}</th>
                             <th>{{ transaction.price }}</th>
                         </tr>
