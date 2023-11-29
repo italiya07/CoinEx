@@ -1,0 +1,92 @@
+{% extends 'CoinEx_Index/base.html' %}
+
+{% block content %}
+    <style>
+        /* CSS for NFT List View */
+
+/* Style for the table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f2f2f2;
+}
+
+/* Style for table rows */
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Style for image */
+.table img {
+  display: block;
+  margin: 0 auto; /* Add this line to center the image */
+}
+
+/* Style for Buy button */
+.btn {
+  display: inline-block;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+/* Style for Bootstrap icon */
+.bi {
+  vertical-align: text-bottom;
+  margin-right: 5px;
+}
+
+    </style>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>MarketCap</th>
+                <th>Buy</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nft in nfts %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ nft.name }}</td>
+                    <td>{{ nft.symbol }}</td>
+                    <td>{{ nft.price }}</td>
+                    <td>
+                    <img src="{{ nft.image.url }}" alt="NFT Image" width="100"></td>
+                    <td>{{ nft.market_cap }}</td>
+                    <td>
+                        <a href="{% url 'buy_nft' nft.symbol %}" class="btn btn-primary">
+                                <i class="bi bi-cart"></i> Buy
+                            </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'CoinEx_Index/base.html' %}
+{% block title %}User Holding{% endblock %}
+{% load static %}
+{% block content %}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Attach change event handler to the select element
+        $('#cryptoSelect').change(function() {
+            // Get the selected value from the dropdown
+            var selectedValue = $(this).val();
+
+            // Set the value of the hidden input field only if an option is selected
+            if (selectedValue) {
+                $('#stockSymbolInput').val(selectedValue);
+            } else {
+                // Clear the value if no option is selected
+                $('#stockSymbolInput').val('');
+            }
+        });
+    });
+</script>
+
+
+    <div class="container">
+
+        {% if holdings %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Crypto</th>
+                        <th>Company</th>
+                        <th>Current Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for holding in holdings %}
+                        <tr>
+                            <td>{{ holding.crypto.symbol }}</td>
+                            <td>{{ holding.crypto.name }}</td>
+                            <td>{{ holding.crypto.price }}</td>
+                            <td>{{ holding.quantity }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Sell Section -->
+            <div class="mt-4">
+                <h3>Sell Cryptocurrency</h3>
+                <form method="post" action="{% url 'user-holdings' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="cryptoSelect">Select Cryptocurrency to Sell:</label>
+                        <select class="form-select" id="cryptoSelect" name="crypto_symbol">
+                        <option value="" selected>Select an option</option>
+    {% for holding in holdings %}
+        <option value="{{ holding.crypto.symbol }}">{{ holding.crypto.name }} ({{ holding.crypto.symbol }})</option>
+    {% endfor %}
+</select>
+
+<input type="hidden" name="stock_symbol" id="stockSymbolInput" value="">
+
+                    </div>
+                    <div class="form-group">
+                        {{ sell_form.quantity.label_tag }}
+                        {{ sell_form.quantity }}
+                        {% if sell_form.errors.quantity %}
+                            <span class="text-danger">{{ sell_form.errors.quantity }}</span>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-cash"></i> Sell</button>
+                </form>
+            </div>
+
+            <!-- Pagination Section -->
+            <div class="pagination justify-content-center mb-5">
+                <span class="step-links">
+                    {% if holdings.has_previous %}
+                        <a href="?page=1" class="btn btn-primary mx-2">&laquo; first</a>
+                        <a href="?page={{ holdings.previous_page_number }}" class="btn btn-primary mx-2">previous</a>
+                    {% endif %}
+
+                    <span class="current fw-bold">
+                        Page {{ holdings.number }} of {{ holdings.paginator.num_pages }}.
+                    </span>
+
+                    {% if holdings.has_next %}
+                        <a href="?page={{ holdings.next_page_number }}" class="btn btn-primary mx-2">next</a>
+                        <a href="?page={{ holdings.paginator.num_pages }}" class="btn btn-primary mx-2">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+
+        {% else %}
+            <p class="fw-bold text-primary mb-5" style="font-size: 40px">No current holdings</p>
+        {% endif %}
+
+    </div>
+{% endblock %}
