@@ -265,7 +265,7 @@ def crypto_highlights(request, currency):
 
     # Retrieve the latest Fear & Greed Index value
     latest_fg_index = FearAndGreedIndex.objects.latest('date')
-
+    #latest_fg_index.__setattr__('value', 2)
     # Assuming 'end_date' is today's date
     end_date = timezone.now().date()
 
