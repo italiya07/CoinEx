@@ -553,22 +553,23 @@ def user_holdings(request):
         holdings_page = paginator.page(1)
     except EmptyPage:
         holdings_page = paginator.page(paginator.num_pages)
+
     if request.method == "POST":
         sell_form = SellStockForm(request.POST)
         if sell_form.is_valid():
             stock_symbol = sell_form.cleaned_data["stock_symbol"]
             quantity_to_sell = sell_form.cleaned_data["quantity"]
-            stock = Cryptocurrency.objects.get(symbol=stock_symbol)
-            holding = holdings.filter(stock=stock).first()
+            crypto = Cryptocurrency.objects.get(symbol=stock_symbol)
+            holding = holdings.filter(crypto=crypto).first()
             if (
                 holding
                 and quantity_to_sell > 0
                 and quantity_to_sell <= holding.quantity
             ):
-                sell_price = stock.current_price * quantity_to_sell
+                sell_price = crypto.price * quantity_to_sell
                 sell_transaction = Transaction(
                     user=request.user,
-                    stock=stock,
+                    crypto=crypto,
                     transaction_type="Sell",
                     quantity=quantity_to_sell,
                     price=sell_price,
@@ -576,7 +577,7 @@ def user_holdings(request):
                 sell_transaction.save()
                 holding.quantity -= quantity_to_sell
                 holding.save()
-                request.user.wallet += Decimal(sell_price)
+                # request.user.wallet += Decimal(sell_price)
                 request.user.save()
                 if holding.quantity == 0:
                     holding.delete()
@@ -606,10 +607,8 @@ def nftuser_holdings(request):
         holdings_page = paginator.page(1)
     except EmptyPage:
         holdings_page = paginator.page(paginator.num_pages)
-
     if request.method == "POST":
         sell_form = SellNFTForm(request.POST)
-
         if sell_form.is_valid():
             nft_symbol = sell_form.cleaned_data["nft_symbol"]
             quantity_to_sell = sell_form.cleaned_data["quantity"]
@@ -621,7 +620,7 @@ def nftuser_holdings(request):
                     and quantity_to_sell > 0
                     and quantity_to_sell <= holding.quantity
             ):
-                sell_price = nft.current_price * quantity_to_sell
+                sell_price = nft.price * quantity_to_sell
 
                 sell_transaction = NFTTransaction(
                     user=request.user,
