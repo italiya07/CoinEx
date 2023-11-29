@@ -2,11 +2,12 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from .models import FearAndGreedIndex, News, Cryptocurrency
-from .forms import CustomUserForm,  EmailAuthenticationForm
+from .models import FearAndGreedIndex, News, Cryptocurrency,Profile,Tweet
+from .forms import CustomUserForm,  EmailAuthenticationForm,TweetForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as django_login, authenticate
-
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 def index(request):
     cryptos = Cryptocurrency.objects.all()
     # Retrieve top 5 cryptocurrencies for the highlight box
@@ -62,3 +63,79 @@ def fear_and_greed_index(request):
 def news_list(request):
     all_news = News.objects.all()
     return render(request, 'CoinEx_Index/news_list.html', {'all_news': all_news})
+
+def community(request):
+    profile=request.user.profile
+    if request.user.is_authenticated:
+        form=TweetForm(request.POST or None)
+        if request.method=='POST':
+            if form.is_valid():
+                tweet=form.save(commit=False)
+                tweet.user=request.user
+                tweet.save()
+                messages.success(request,('Your tweet has been saved!!'))
+                return redirect('community')
+        tweets=Tweet.objects.all().order_by('-created_at')    
+        return render(request,'CoinEx_Index/community.html',{'tweets':tweets,'profile':profile,'form':form})
+        
+    else:
+        tweets=Tweet.objects.all().order_by('-created_at')    
+        return render(request,'CoinEx_Index/community.html',{'tweets':tweets,'profile':profile})
+
+
+def delete_tweet(request, tweet_id):
+    if request.method == 'POST':
+        tweet_to_delete = get_object_or_404(Tweet, id=tweet_id, user=request.user)
+        tweet_to_delete.delete()
+        messages.success(request, 'Tweet deleted successfully.')
+    return redirect('community')  
+
+
+# @login_required
+def profile_list(request):
+    # Get the current user's profile
+    # current_user_profile = request.user.profile
+
+    # Exclude the current user's profile from the list
+    # profileAll=Profile.objects.all()
+    # print(profileAll)
+    if request.user.is_authenticated:
+        profiles = Profile.objects.exclude(user=request.user)
+        context = {
+            'profiles': profiles,
+            # 'current_user_profile': current_user_profile,
+        }
+        return render(request, 'CoinEx_Index/profile_list.html', context)
+    else:
+        messages.success(request,("You must be logged in to view this page!!"))
+        login_url = reverse('login')
+        return redirect(login_url)
+         
+
+
+
+def profile_detail(request, pk):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user_id=pk)
+        current_user_profile = request.user.profile
+        tweets=Tweet.objects.filter(user__id=pk)
+
+        if request.method == 'POST':
+            action = request.POST.get('follow')
+
+            if action == 'unfollow':
+                current_user_profile.follows.remove(profile)
+                messages.success(request, f"You have unfollowed {profile.user.first_name}.")
+            elif action == 'follow':
+                current_user_profile.follows.add(profile)
+                messages.success(request, f"You are now following {profile.user.first_name}.")
+
+            current_user_profile.save()
+
+        return render(request, 'CoinEx_Index/profile_detail.html', {'profile': profile, 'current_user_profile': current_user_profile,'tweets':tweets})
+    else:
+        messages.success(request, "You must be logged in to view this page!")
+        return redirect('login')
+    
+
+      

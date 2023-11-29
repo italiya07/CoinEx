@@ -1,0 +1,42 @@
+{% extends 'CoinEx_Index/base.html' %}
+
+{% block content %}
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-8" style="max-height: 500px; overflow-y: auto;">
+                <h1>{{ profile.user.first_name }}</h1>
+                <br/>
+
+                {% if tweets %}
+                    {% for tweet in tweets %}
+                        <div class="alert alert-dark position-relative" role="alert">
+                            <form method="POST" style="position: absolute; top: 0; left: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link text-danger p-0" name="delete_tweet" value="{{ tweet.id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                            {{ tweet.body }} <br/>
+                            <small class="text-muted">
+                                ({{ tweet.created_at }}) by @{{ tweet.user.first_name }}
+                            </small>
+                        </div>
+                        <br/>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <br/><br/><br/>
+
+                {% if form %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-secondary">Tweet!</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

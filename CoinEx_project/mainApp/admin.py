@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Cryptocurrency
+from .models import User, Cryptocurrency,Profile, Tweet
 
+
+class ProfileInline(admin.StackedInline):
+    model=Profile
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff',)
@@ -22,8 +25,12 @@ class CustomUserAdmin(UserAdmin):
     )
 
     readonly_fields = ['date_joined']
+    inlines=[ProfileInline]
 
 
 # Register the CustomUser model with the admin site
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Cryptocurrency)
+admin.site.register(Tweet)
+
+

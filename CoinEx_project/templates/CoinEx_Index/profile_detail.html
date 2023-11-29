@@ -1,0 +1,60 @@
+{% extends 'CoinEx_Index/base.html' %}
+
+{% block content %}
+    {% if profile %}
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Content for the first column (width 8) -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title">{{ profile.user.first_name }} {{ profile.user.last_name|lower }}</h1>
+                            <p class="card-text">{{ profile.user.email }}</p>
+                            <p class="card-text">{{ profile.user.date_joined|date:'F d, Y H:i:s' }}</p>
+                            <!-- Add more content here if needed -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <strong>Follows</strong>
+                            {% if current_user_profile.follows.exists %}
+                                <ul class="list-group">
+                                    {% for following in current_user_profile.follows.all %}
+                                        <li class="list-group-item">{{ following.user.first_name }} {{ following.user.last_name }} - {{ following.user.email }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No follows yet.</p>
+                            {% endif %}
+
+                            <br>
+
+                            <strong>Followed by</strong>
+                            {% if profile.followed_by.exists %}
+                                <ul class="list-group">
+                                    {% for follower in profile.followed_by.all %}
+                                        <li class="list-group-item">{{ follower.user.first_name }} {{ follower.user.last_name }} - {{ follower.user.email }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No followers yet.</p>
+                            {% endif %}
+                            <br/>
+                            
+                            <form method="POST">
+                                {% csrf_token %}
+                                {% if profile in current_user_profile.follows.all %}
+                                    <button type="submit" class="btn btn-outline-danger" name='follow' value='unfollow'>Unfollow @{{profile.user.first_name|lower}}</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-outline-success" name='follow' value='follow'>Follow @{{profile.user.first_name|lower}}</button>
+                                {% endif%}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

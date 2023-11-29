@@ -1,0 +1,36 @@
+{% extends 'CoinEx_Index/base.html' %}
+
+{% block content %}
+<h1>Profile List</h1>
+{% if profiles %}
+    <ul>
+        {% for profile in profiles %}
+            <li>
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="..." class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'profile_detail' pk=profile.user.id %}">
+                                        {{ profile.user.first_name }} {{ profile.user.last_name }}
+                                    </a>
+                                </h5>
+                                <p class="card-text">{{ profile.user.email }}</p>
+                                <p class="card-text">{{ profile.user.last_login }}</p>
+                                <p class="card-text">{{ profile.user.is_active|yesno:"Yes,No" }}</p>
+                                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No profiles present.</p>
+{% endif %}    
+
+{% endblock %}
