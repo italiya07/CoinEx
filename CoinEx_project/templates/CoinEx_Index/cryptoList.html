@@ -1,0 +1,171 @@
+{% block cryptoListView %}
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>1h%</th>
+                <th>24h%</th>
+                <th>MarketCap</th>
+                <th>Volume</th>
+                <th>BUY</th>
+            </tr>
+        </thead>
+        <tbody> {% for crypto in cryptos %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ crypto.name }}</td>
+                <td>{{ crypto.symbol }}</td>
+                
+                {% if currency == 'USD' %}
+                <td>{{ crypto.quote.USD.price }} USD</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.USD.market_cap }} USD</td>
+                <td>{{ crypto.quote.USD.volume_24h }} USD</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.USD.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+                
+                {% elif currency == 'ARS' %}
+                <td>{{ crypto.quote.ARS.price }} ARS</td>
+                <td
+                    class="{% if crypto.quote.ARS.percent_change_1h == -1 %}text-danger{% elif crypto.quote.ARS.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.ARS.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.ARS.percent_change_24h == -1 %}text-danger{% elif crypto.quote.ARS.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.ARS.percent_change_24h }}</td>
+                <td>{{ crypto.quote.ARS.market_cap }} ARS</td>
+                <td>{{ crypto.quote.ARS.volume_24h }} ARS</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.ARS.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+                
+                {% elif currency == 'INR' %}
+                <td>{{ crypto.quote.INR.price }} INR</td>
+                <td
+                    class="{% if crypto.quote.INR.percent_change_1h == -1 %}text-danger{% elif crypto.quote.INR.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.INR.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.INR.percent_change_24h == -1 %}text-danger{% elif crypto.quote.INR.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.INR.percent_change_24h }}</td>
+                <td>{{ crypto.quote.INR.market_cap }} INR</td>
+                <td>{{ crypto.quote.INR.volume_24h }} INR</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.INR.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+                
+                {% elif currency == 'AUD' %}
+                <td>{{ crypto.quote.AUD.price }} AUD</td>
+                <td
+                    class="{% if crypto.quote.AUD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.AUD.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.AUD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.AUD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.AUD.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.AUD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.AUD.market_cap }} AUD</td>
+                <td>{{ crypto.quote.AUD.volume_24h }} AUD</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.AUD.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+                
+                {% elif currency == 'GBP' %}
+                <td>{{ crypto.quote.GBP.price }} GBP</td>
+                <td
+                    class="{% if crypto.quote.GBP.percent_change_1h == -1 %}text-danger{% elif crypto.quote.GBP.percent_change_1h > 0 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.GBP.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.GBP.percent_change_24h == -1 %}text-danger{% elif crypto.quote.GBP.percent_change_24h > 0 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.GBP.percent_change_24h }}</td>
+                <td>{{ crypto.quote.GBP.market_cap }} GBP</td>
+                <td>{{ crypto.quote.GBP.volume_24h }} GBP</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.GBP.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+                
+                {% elif currency == 'IDR' %}
+                <td>{{ crypto.quote.IDR.price }} IDR</td>
+                <td
+                    class="{% if crypto.quote.IDR.percent_change_1h == -1 %}text-danger{% elif crypto.quote.IDR.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.IDR.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.IDR.percent_change_24h == -1 %}text-danger{% elif crypto.quote.IDR.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.IDR.percent_change_24h }}</td>
+                <td>{{ crypto.quote.IDR.market_cap }} IDR</td>
+                <td>{{ crypto.quote.IDR.volume_24h }} IDR</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.IDR.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+
+                {% elif currency == 'KRW' %}
+                <td>{{ crypto.quote.KRW.price }} KRW</td>
+                <td
+                    class="{% if crypto.quote.KRW.percent_change_1h == -1 %}text-danger{% elif crypto.quote.KRW.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.KRW.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.KRW.percent_change_24h == -1 %}text-danger{% elif crypto.quote.KRW.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.KRW.percent_change_24h }}</td>
+                <td>{{ crypto.quote.KRW.market_cap }} KRW</td>
+                <td>{{ crypto.quote.KRW.volume_24h }} KRW</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.KRW.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+
+                {% elif currency == 'TRY' %}
+                <td>{{ crypto.quote.TRY.price }} TRY</td>
+                <td
+                    class="{% if crypto.quote.TRY.percent_change_1h == -1 %}text-danger{% elif crypto.quote.TRY.percent_change_1h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.TRY.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.TRY.percent_change_24h == -1 %}text-danger{% elif crypto.quote.TRY.percent_change_24h == 1 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.TRY.percent_change_24h }}</td>
+                <td>{{ crypto.quote.TRY.market_cap }} TRY</td>
+                <td>{{ crypto.quote.TRY.volume_24h }} TRY</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.TRY.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+
+                {% else %}
+                <td>{{ crypto.quote.USD.price }} USD</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_1h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_1h > 0 %}text-success{% else %}text-success{% endif %}">
+                    {{ crypto.quote.USD.percent_change_1h }}</td>
+                <td
+                    class="{% if crypto.quote.USD.percent_change_24h == -1 %}text-danger{% elif crypto.quote.USD.percent_change_24h > 0 %}text-success{% else %}text-muted{% endif %}">
+                    {{ crypto.quote.USD.percent_change_24h }}</td>
+                <td>{{ crypto.quote.USD.market_cap }} USD</td>
+                <td>{{ crypto.quote.USD.volume_24h }} USD</td>
+                <td>
+                    <a href="{% url 'buy_crypto' crypto.symbol crypto.quote.USD.price %}" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> Buy
+                        </a>
+                </td>
+                {% endif %}                
+
+            </tr> {% endfor %}
+        </tbody>
+    </table>
+</div> {% endblock %}

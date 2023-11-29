@@ -1,11 +1,215 @@
 {% extends 'base.html' %}
 {% load static %}
-<link href="{% static 'style/highlights.css'%}" rel="stylesheet">
+{% load custom_filters %}
+
 {% block content %}
-    <h1>Complete List of Cryptocurrencies</h1>
-    <ul>
-        {% for crypto in all_cryptos %}
-            <li>{{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.price }}</li>
-        {% endfor %}
-    </ul>
+
+<div class="container mt-4 mb-4">
+    <!-- Heading -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="display-4 text-center">Highlights of the Day</h2>
+        </div>
+    </div>
+
+    <!-- Top Cryptocurrencies based on CMC Rank -->
+    <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="fs-5">Top Cryptocurrencies
+                        <img src="{% static 'icons/icons8-rank-16.png' %}" alt="icon" class="icon">
+                        </h3>
+                        <ul class="list-group">
+                            {% for crypto in top_cryptos %}
+                                <li class="list-group-item">
+                                    {{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.price }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="fs-5">
+                        Top 5 Gainers
+                            <img src="{% static 'icons/icons8-positive-dynamic-16.png' %}" alt="icon" class="icon">
+                        </h3>
+                        <ul class="list-group">
+                            {% for gainer in top_gainers %}
+                                <li class="list-group-item">
+                                    {{ gainer.name }} ({{ gainer.symbol }}): ${{ gainer.price }}
+                                <span class="percentage-change">
+                                    ({{ gainer.percent_change_24h }}%
+                                    <img src="{% static 'icons/icons8-up-triangle-16.png' %}" alt="icon" class="icon">)
+                                </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="fs-5">Top 5 Losers
+                        <img src="{% static 'icons/icons8-negative-dynamic-16.png' %}" alt="icon" class="icon">
+                        </h3>
+                        <ul class="list-group">
+                            {% for loser in top_losers %}
+                                <li class="list-group-item">
+                                    {{ loser.name }} ({{ loser.symbol }}): ${{ loser.price }}
+                                 <span class="loser-percentage-change">
+                                    ({{ loser.percent_change_24h }}%
+                                     <img src="{% static 'icons/icons8-down-triangle-arrow-16.png' %}" alt="icon" class="icon">)
+                                </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="fs-5"> Most Recently Added
+                    <img src="{% static 'icons/icons8-time-machine-16.png' %}" alt="icon" class="icon">
+                    </h3>
+                    <!-- Recently Added Box Content -->
+                    <ul class="list-group">
+                        {% for stock in recently_added %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    {{ stock.name }} ({{ stock.symbol }}): ${{ stock.price }}
+                                </span>
+                                <span class="badge bg-secondary">
+                                    {{ stock.date_added }}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                     <h3 class="fs-5">Trending Latest based on Volume
+                     <img src="{% static 'icons/icons8-trending-16.png' %}" alt="icon" class="icon">
+                     </h3>
+                    <ul class="list-group">
+                        {% for trend in trending_latest %}
+                            <li class="list-group-item">
+                                {{ trend.name }} ({{ trend.symbol }}): ${{ trend.price }} (Volume: {{ trend.volume_24h }})
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="fs-5">Latest News
+                    <img src="{% static 'icons/icons8-news-16.png' %}" alt="icon" class="icon">
+                    </h3>
+                    <ul class="list-group">
+                        {% for news in latest_news %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="{{ news.link }}" target="_blank">{{ news.title }}</a>
+                                <span class="badge bg-secondary">{{ news.published_date }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body d-flex flex-row">
+                    <!-- Fear & Greed Box Content -->
+                    <div class="index-box">
+                        <h3 class="fs-5">Fear and Grid Index
+                        <img src="{% static 'icons/icons8-stock-market-16.png' %}" alt="icon" class="icon">
+                        </h3>
+                        <div class="index-indicator" style="background-color: {{ latest_fg_index.value|get_index_color }}; height: 150px; width: 150px; border-radius: 15px; padding: 24px; color: white; display: flex; justify-content: center; align-items: center;">
+                            <p class="fs-3 m-0">
+                                {{ latest_fg_index.value }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="flex-grow-1">
+                        <canvas id="fearAndGreedChart" width="800" height="400"></canvas>
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                       <script>
+                        // Get the data from the Django context and convert it to a format suitable for Chart.js
+                        var historicalData = [
+                            {% for index in all_fg_indexes %}
+                                { date: '{{ index.date }}', value: {{ index.value }} },
+                            {% endfor %}
+                        ];
+
+                        // Set up the Chart.js line chart
+                        var ctx = document.getElementById('fearAndGreedChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: historicalData.map(data => data.date),
+                                datasets: [{
+                                    label: 'Fear & Greed Index',
+                                    data: historicalData.map(data => data.value),
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 2,
+                                    fill: false,
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    x: [{
+                                        type: 'time',
+                                        time: {
+                                            unit: 'day',
+                                            tooltipFormat: 'll',
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Date'
+                                        }
+                                    }],
+                                    y: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Fear & Greed Index Value'
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

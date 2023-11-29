@@ -1,12 +1,14 @@
+{% load static %}
+{% load custom_filters %}
+
 <!-- Container for Highlights Section with Toggle Switch -->
 <div class="container mt-4">
-    <div class="d-flex align-items-center justify-content-between">
-        <h2 class="display-8 text-left mb-0">Highlights</h2>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="fs-4">Today's Highlights</h2>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="toggleSwitch" onclick="toggleHighlights()">
         </div>
     </div>
-
 <!-- Highlights Content -->
     <div class="row" id="highlights-container" {% if not highlights_visible %} style="display: none;" {% endif %}>
 
@@ -17,47 +19,79 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Top 5 Cryptocurrencies</h3>
-                    <!-- Crypto Box Content -->
+                   <h3 class="fs-5">
+                        Top 5 Gainers
+                        <img src="{% static 'icons/icons8-positive-dynamic-16.png' %}" alt="icon" class="icon">
+                    </h3>
+                    <!-- Top Gainers Box Content -->
                     <ul class="list-group">
-                        {% for crypto in top_cryptos %}
-                            <li class="list-group-item">{{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.price }}</li>
+                        {% for gainer in top_gainers %}
+                            <li class="list-group-item">
+                                {{ gainer.name }} ({{ gainer.symbol }}):
+                                ${{ gainer.price }}
+                                <span class="percentage-change">
+                                    ({{ gainer.percent_change_24h }}%
+                                    <img src="{% static 'icons/icons8-up-triangle-16.png' %}" alt="icon" class="icon">)
+                                </span>
+                            </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary mt-2">View Full List</a>
                 </div>
             </div>
         </div>
 
-        <!-- News Box -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Latest News</h3>
-                    <!-- News Box Content -->
+                    <h3 class="fs-5">Top 5 Losers
+                    <img src="{% static 'icons/icons8-negative-dynamic-16.png' %}" alt="icon" class="icon">
+                    </h3>
+                    <!-- Top Gainers Box Content -->
                     <ul class="list-group">
-                        {% for news in latest_news %}
-                            <li class="list-group-item"><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
+                        {% for loser in top_losers %}
+                            <li class="list-group-item">
+                                {{ loser.name }} ({{ loser.symbol }}):
+                                ${{ loser.price }}
+                                 <span class="loser-percentage-change">
+                                    ({{ loser.percent_change_24h }}%
+                                     <img src="{% static 'icons/icons8-down-triangle-arrow-16.png' %}" alt="icon" class="icon">)
+                                </span>
+                            </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary mt-2">View All News</a>
                 </div>
             </div>
         </div>
 
-        <!-- Fear & Greed Box -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Fear & Greed Index</h3>
-                    <!-- Fear & Greed Box Content -->
-                    <p class="card-text">Latest Value: {{ latest_index.value }}</p>
-                    <a href="{% url 'fear_and_greed_index' %}" class="btn btn-outline-primary mt-2">View Full Index</a>
-                </div>
-            </div>
+<div class="col-md-4">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="fs-5"> Most Recently Added
+            <img src="{% static 'icons/icons8-time-machine-16.png' %}" alt="icon" class="icon">
+            </h3>
+            <!-- Recently Added Box Content -->
+            <ul class="list-group">
+                {% for stock in recently_added %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ stock.name }} ({{ stock.symbol }}): ${{ stock.price }}
+                        </span>
+                        <span class="badge bg-secondary">
+                            {{ stock.date_added }}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-
     </div>
+</div>
+
+
+        <div class="col-md-12 mt-2">
+            <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary">View more</a>
+        </div>
+    </div>
+</div>
 </div>
 
 <!-- JavaScript to toggle visibility -->
