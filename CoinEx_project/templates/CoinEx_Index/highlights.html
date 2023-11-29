@@ -28,7 +28,7 @@
                         {% for gainer in top_gainers %}
                             <li class="list-group-item">
                                 {{ gainer.name }} ({{ gainer.symbol }}):
-                                ${{ gainer.price }}
+                                {{ gainer.price }} {{ currency }}
                                 <span class="percentage-change">
                                     ({{ gainer.percent_change_24h }}%
                                     <img src="{% static 'icons/icons8-up-triangle-16.png' %}" alt="icon" class="icon">)
@@ -51,7 +51,7 @@
                         {% for loser in top_losers %}
                             <li class="list-group-item">
                                 {{ loser.name }} ({{ loser.symbol }}):
-                                ${{ loser.price }}
+                                {{ loser.price }} {{ currency }}
                                  <span class="loser-percentage-change">
                                     ({{ loser.percent_change_24h }}%
                                      <img src="{% static 'icons/icons8-down-triangle-arrow-16.png' %}" alt="icon" class="icon">)
@@ -74,7 +74,7 @@
                 {% for stock in recently_added %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>
-                            {{ stock.name }} ({{ stock.symbol }}): ${{ stock.price }}
+                            {{ stock.name }} ({{ stock.symbol }}): {{ stock.price }} {{ currency }}
                         </span>
                         <span class="badge bg-secondary">
                             {{ stock.date_added }}
@@ -88,7 +88,7 @@
 
 
         <div class="col-md-12 mt-2">
-            <a href="{% url 'crypto_highlights' %}" class="btn btn-outline-primary">View more</a>
+            <a href="{% url 'crypto_highlights' currency=currency %}" class="btn btn-outline-primary">View more</a>
         </div>
     </div>
 </div>

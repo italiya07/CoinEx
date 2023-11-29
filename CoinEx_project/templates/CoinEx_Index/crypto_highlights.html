@@ -23,7 +23,7 @@
                         <ul class="list-group">
                             {% for crypto in top_cryptos %}
                                 <li class="list-group-item">
-                                    {{ crypto.name }} ({{ crypto.symbol }}): ${{ crypto.price }}
+                                    {{ crypto.name }} ({{ crypto.symbol }}): {{ crypto.price }} {{ currency_symbol }}
                                 </li>
                             {% endfor %}
                         </ul>
@@ -41,7 +41,7 @@
                         <ul class="list-group">
                             {% for gainer in top_gainers %}
                                 <li class="list-group-item">
-                                    {{ gainer.name }} ({{ gainer.symbol }}): ${{ gainer.price }}
+                                    {{ gainer.name }} ({{ gainer.symbol }}): {{ gainer.price }} {{ currency_symbol }}
                                 <span class="percentage-change">
                                     ({{ gainer.percent_change_24h }}%
                                     <img src="{% static 'icons/icons8-up-triangle-16.png' %}" alt="icon" class="icon">)
@@ -62,7 +62,7 @@
                         <ul class="list-group">
                             {% for loser in top_losers %}
                                 <li class="list-group-item">
-                                    {{ loser.name }} ({{ loser.symbol }}): ${{ loser.price }}
+                                    {{ loser.name }} ({{ loser.symbol }}): {{ loser.price }} {{ currency_symbol }}
                                  <span class="loser-percentage-change">
                                     ({{ loser.percent_change_24h }}%
                                      <img src="{% static 'icons/icons8-down-triangle-arrow-16.png' %}" alt="icon" class="icon">)
@@ -87,7 +87,7 @@
                         {% for stock in recently_added %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span>
-                                    {{ stock.name }} ({{ stock.symbol }}): ${{ stock.price }}
+                                    {{ stock.name }} ({{ stock.symbol }}): {{ stock.price }} {{ currency_symbol }}
                                 </span>
                                 <span class="badge bg-secondary">
                                     {{ stock.date_added }}
@@ -108,7 +108,7 @@
                     <ul class="list-group">
                         {% for trend in trending_latest %}
                             <li class="list-group-item">
-                                {{ trend.name }} ({{ trend.symbol }}): ${{ trend.price }} (Volume: {{ trend.volume_24h }})
+                                {{ trend.name }} ({{ trend.symbol }}): {{ trend.price }} {{ currency_symbol }} (Volume: {{ trend.volume_24h }})
                             </li>
                         {% endfor %}
                     </ul>

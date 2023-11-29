@@ -33,7 +33,7 @@ body {
 }
 
 .card:hover {
-    transform: scale(1.03);
+    transform: scale(1.01);
 }
 
 /* List Group Styles */
@@ -133,9 +133,9 @@ body {
 }
 
 .icon {
-	width: 30px; /* Adjust the width as needed */
-	height: 30px; /* Adjust the height as needed */
-	margin-left: 10px; /* Adjust the margin as needed */
+	width: 20px; /* Adjust the width as needed */
+	height: 20px; /* Adjust the height as needed */
+	margin-left: 5px; /* Adjust the margin as needed */
 }
 .form-style-10 {
 	width: 450px;
