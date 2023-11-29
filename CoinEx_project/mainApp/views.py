@@ -452,7 +452,7 @@ def buy_nft(request, nft_symbol):
                 error_message = e.error.message
                 print(f"Stripe CardError: {error_message}")
     else:
-        form = BuyCrypto()
+        form = BuyNFT()
 
     return render(
         request,
