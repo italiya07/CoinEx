@@ -98,6 +98,16 @@
               <li><a class="dropdown-item" href="{% url 'nft-transaction-history' %}">NFT Transaction History</a></li>
             </ul>
           </li>
+              <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Holdings
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'user-holdings' %}">Crypto Holdings</a></li>
+              <li><a class="dropdown-item" href="{% url 'nft-user-holdings' %}">NFT Holdings</a></li>
+            </ul>
+          </li>
           {% else %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
