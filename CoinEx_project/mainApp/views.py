@@ -553,7 +553,7 @@ def user_holdings(request):
         holdings_page = paginator.page(1)
     except EmptyPage:
         holdings_page = paginator.page(paginator.num_pages)
-
+    # breakpoint()
     if request.method == "POST":
         sell_form = SellStockForm(request.POST)
         if sell_form.is_valid():
