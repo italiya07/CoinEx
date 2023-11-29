@@ -1,5 +1,5 @@
 # Create your views here.
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from django.http import HttpResponse
@@ -15,6 +15,8 @@ def index(request):
     cryptos = Cryptocurrency.objects.all()
     # Retrieve top 5 cryptocurrencies for the highlight box
     top_cryptos = Cryptocurrency.objects.all()[:5]
+from django.utils import timezone
+
 from .models import FearAndGreedIndex, News, Cryptocurrency, ContactUs, Transaction, NFTTransaction, NFT, UserHolding, NFTUserHolding
 from .forms import CustomUserForm, EmailAuthenticationForm, ContactForm, BuyCrypto, TransactionFilterForm, BuyNFT, SellStockForm, SellNFTForm
 
@@ -59,13 +61,15 @@ def index(request):
     main_data = apis()
     print(main_data['data'])
 
-    top_gainers, top_losers = extract_top_gainers_and_losers(main_data)
+    currency_symbol = 'USD'
 
-    recently_added = extract_recently_added(main_data)
+    top_gainers, top_losers = extract_top_gainers_and_losers(main_data, currency_symbol)
+
+    recently_added = extract_recently_added(main_data, currency_symbol)
 
     data = {
         "cryptos": main_data['data'],
-        "currency" : 'USD',
+        "currency" : currency_symbol,
         "top_gainers": top_gainers,
         "top_losers": top_losers,
         "recently_added": recently_added
@@ -76,8 +80,17 @@ def index(request):
 @login_required(login_url="login")
 def exchange(request, currency_symbol):
     main_data = apis(currency_symbol)
+    top_gainers, top_losers = extract_top_gainers_and_losers(main_data, currency_symbol)
+
+    recently_added = extract_recently_added(main_data, currency_symbol)
     # print(main_data['data'])
-    data = {"cryptos": main_data["data"], "currency": currency_symbol}
+    data = {
+        "cryptos": main_data['data'],
+        "currency": currency_symbol,
+        "top_gainers": top_gainers,
+        "top_losers": top_losers,
+        "recently_added": recently_added
+    }
     return render(request, "CoinEx_Index/index.html", context=data)
 
 def contact_us(request):
@@ -142,20 +155,20 @@ def logout(request):
     return redirect("/")
 
 
-def extract_top_gainers_and_losers(main_data, limit=5):
+def extract_top_gainers_and_losers(main_data, currency_symbol, limit=5):
     # Extract the list of cryptocurrencies from main_data
     cryptocurrencies = main_data.get('data', [])
 
     # Sort the cryptocurrencies based on percent_change_24h in descending order
-    sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['quote']['USD']['percent_change_24h'], reverse=True)
+    sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['quote'][currency_symbol]['percent_change_24h'], reverse=True)
 
     # Extract top gainers and losers with only required information
     top_gainers = [
         {
             'name': crypto['name'],
             'symbol': crypto['symbol'],
-            'price': round(crypto['quote']['USD']['price'], 3),
-            'percent_change_24h': round(crypto['quote']['USD']['percent_change_24h'], 3)
+            'price': round(crypto['quote'][currency_symbol]['price'], 3),
+            'percent_change_24h': round(crypto['quote'][currency_symbol]['percent_change_24h'], 3)
         }
         for crypto in sorted_cryptos[:limit]
     ]
@@ -164,15 +177,15 @@ def extract_top_gainers_and_losers(main_data, limit=5):
         {
             'name': crypto['name'],
             'symbol': crypto['symbol'],
-            'price': round(crypto['quote']['USD']['price'], 3),
-            'percent_change_24h': round(crypto['quote']['USD']['percent_change_24h'], 3)
+            'price': round(crypto['quote'][currency_symbol]['price'], 3),
+            'percent_change_24h': round(crypto['quote'][currency_symbol]['percent_change_24h'], 3)
         }
         for crypto in sorted_cryptos[-limit:]
     ]
 
     return top_gainers, top_losers
 
-def extract_recently_added(main_data, limit=5):
+def extract_recently_added(main_data, currency_symbol, limit=5):
     try:
         # Extract the list of cryptocurrencies from main_data
         cryptocurrencies = main_data.get('data', [])
@@ -185,7 +198,7 @@ def extract_recently_added(main_data, limit=5):
             {
                 'name': crypto['name'],
                 'symbol': crypto['symbol'],
-                'price': round(crypto['quote']['USD']['price'], 3),
+                'price': round(crypto['quote'][currency_symbol]['price'], 3),
                 'date_added': datetime.strptime(crypto['date_added'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%B %d, %Y')
             }
             for crypto in sorted_cryptos[:limit]
@@ -198,7 +211,7 @@ def extract_recently_added(main_data, limit=5):
         return None
 
 
-def extract_top_cryptos_by_rank(main_data, limit=10):
+def extract_top_cryptos_by_rank(main_data, currency_symbol, limit=10):
     try:
         # Extract the list of cryptocurrencies from main_data
         cryptocurrencies = main_data.get('data', [])
@@ -211,7 +224,7 @@ def extract_top_cryptos_by_rank(main_data, limit=10):
             {
                 'name': crypto['name'],
                 'symbol': crypto['symbol'],
-                'price': round(crypto['quote']['USD']['price'], 3)
+                'price': round(crypto['quote'][currency_symbol]['price'], 3)
             }
             for crypto in sorted_cryptos[:limit]
         ]
@@ -223,21 +236,21 @@ def extract_top_cryptos_by_rank(main_data, limit=10):
         return None
 
 
-def extract_trending_latest(main_data, limit=10):
+def extract_trending_latest(main_data, currency_symbol, limit=10):
     try:
         # Extract the list of cryptocurrencies from main_data
         cryptocurrencies = main_data.get('data', [])
 
         # Sort the cryptocurrencies based on the volume_24h in descending order
-        sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['quote']['USD']['volume_24h'], reverse=True)
+        sorted_cryptos = sorted(cryptocurrencies, key=lambda x: x['quote'][currency_symbol]['volume_24h'], reverse=True)
 
         # Extract trending latest cryptocurrencies based on volume with only required information
         trending_latest = [
             {
                 'name': crypto['name'],
                 'symbol': crypto['symbol'],
-                'price': round(crypto['quote']['USD']['price'], 3),
-                'volume_24h': int(crypto['quote']['USD']['volume_24h'])
+                'price': round(crypto['quote'][currency_symbol]['price'], 3),
+                'volume_24h': int(crypto['quote'][currency_symbol]['volume_24h'])
             }
             for crypto in sorted_cryptos[:limit]
         ]
@@ -249,12 +262,13 @@ def extract_trending_latest(main_data, limit=10):
         return None
 
 
-def crypto_highlights(request):
-    main_data = apis()
-    top_cryptos = extract_top_cryptos_by_rank(main_data, 10)
-    top_gainers, top_losers = extract_top_gainers_and_losers(main_data, 10)
-    recently_added = extract_recently_added(main_data, 10)
-    trending_latest = extract_trending_latest(main_data, 10)
+def crypto_highlights(request, currency):
+    main_data = apis(currency)
+    currency_symbol = currency
+    top_cryptos = extract_top_cryptos_by_rank(main_data, currency_symbol, 10)
+    top_gainers, top_losers = extract_top_gainers_and_losers(main_data, currency_symbol, 10)
+    recently_added = extract_recently_added(main_data, currency_symbol, 10)
+    trending_latest = extract_trending_latest(main_data, currency_symbol, 10)
 
     # Retrieve latest 5 news based on published date
     latest_news = News.objects.order_by('-published_date')[:10]
@@ -262,7 +276,14 @@ def crypto_highlights(request):
     # Retrieve the latest Fear & Greed Index value
     latest_fg_index = FearAndGreedIndex.objects.latest('date')
 
-    all_fg_indexes = FearAndGreedIndex.objects.all()
+    # Assuming 'end_date' is today's date
+    end_date = timezone.now().date()
+
+    # Calculate the start date by subtracting 30 days from the end date
+    start_date = end_date - timedelta(days=30)
+
+    # Retrieve the last 30 days' data
+    all_fg_indexes = FearAndGreedIndex.objects.filter(date__range=[start_date, end_date])
 
     # Create a context dictionary with the data
     context = {
@@ -273,7 +294,8 @@ def crypto_highlights(request):
         'trending_latest': trending_latest,
         "latest_fg_index": latest_fg_index,
         "latest_news": latest_news,
-        "all_fg_indexes": all_fg_indexes
+        "all_fg_indexes": all_fg_indexes,
+        'currency_symbol': currency_symbol
     }
     print(context)
     # Render the template with the context

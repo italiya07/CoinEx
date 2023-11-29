@@ -17,6 +17,7 @@ urlpatterns = [
     # path('delete_tweet/<int:tweet_id>/', views.delete_tweet, name='delete_tweet'),
    
 
+    path('crypto_highlights//<str:currency>/', views.crypto_highlights, name='crypto_highlights'),
     #path('fear_and_greed/', views.fear_and_greed_index, name='fear_and_greed_index'),
     #path('news/', views.news_list, name='news_list'),
     path('buy_crypto/<str:stock_symbol>/<str:price>/', views.buy_stock, name='buy_crypto'),
