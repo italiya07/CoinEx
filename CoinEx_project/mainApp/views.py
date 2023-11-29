@@ -318,12 +318,12 @@ def community(request):
         return render(request,'CoinEx_Index/community.html',{'tweets':tweets,'profile':profile})
 
 
-def delete_tweet(request, tweet_id):
-    if request.method == 'POST':
-        tweet_to_delete = get_object_or_404(Tweet, id=tweet_id, user=request.user)
-        tweet_to_delete.delete()
-        messages.success(request, 'Tweet deleted successfully.')
-    return redirect('community')  
+# def delete_tweet(request, tweet_id):
+#     if request.method == 'POST':
+#         tweet_to_delete = get_object_or_404(Tweet, id=tweet_id, user=request.user)
+#         tweet_to_delete.delete()
+#         messages.success(request, 'Tweet deleted successfully.')
+#     return redirect('community')  
 
 
 # @login_required
@@ -349,11 +349,38 @@ def profile_list(request):
 
 
 
+# def profile_detail(request, pk):
+#     if request.user.is_authenticated:
+#         profile = Profile.objects.get(user_id=pk)
+#         current_user_profile = request.user.profile
+#         tweets=Tweet.objects.filter(user__id=pk)
+
+#         if request.method == 'POST':
+#             action = request.POST.get('follow')
+
+#             if action == 'unfollow':
+#                 current_user_profile.follows.remove(profile)
+#                 messages.success(request, f"You have unfollowed {profile.user.first_name}.")
+#             elif action == 'follow':
+#                 current_user_profile.follows.add(profile)
+#                 messages.success(request, f"You are now following {profile.user.first_name}.")
+
+#             current_user_profile.save()
+
+#         return render(request, 'CoinEx_Index/profile_detail.html', {'profile': profile, 'current_user_profile': current_user_profile,'tweets':tweets})
+#     else:
+#         messages.success(request, "You must be logged in to view this page!")
+#         return redirect('login')
+    
+
+      
+#     return render(request, "CoinEx_Index/news_list.html", {"all_news": all_news})
+
 def profile_detail(request, pk):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user_id=pk)
         current_user_profile = request.user.profile
-        tweets=Tweet.objects.filter(user__id=pk)
+        tweets = Tweet.objects.filter(user__id=pk)
 
         if request.method == 'POST':
             action = request.POST.get('follow')
@@ -364,19 +391,20 @@ def profile_detail(request, pk):
             elif action == 'follow':
                 current_user_profile.follows.add(profile)
                 messages.success(request, f"You are now following {profile.user.first_name}.")
+            elif 'delete_tweet' in request.POST:
+                tweet_id = request.POST['delete_tweet']
+                tweet_to_delete = get_object_or_404(Tweet, id=tweet_id, user=request.user)
+                tweet_to_delete.delete()
+                messages.success(request, "Tweet deleted successfully.")
 
             current_user_profile.save()
 
-        return render(request, 'CoinEx_Index/profile_detail.html', {'profile': profile, 'current_user_profile': current_user_profile,'tweets':tweets})
+        return render(request, 'CoinEx_Index/profile_detail.html', {'profile': profile, 'current_user_profile': current_user_profile, 'tweets': tweets})
     else:
         messages.success(request, "You must be logged in to view this page!")
         return redirect('login')
     
-
-      
-    return render(request, "CoinEx_Index/news_list.html", {"all_news": all_news})
-
-
+    
 def calculate_topness(crypto):
     # Define weights for each factor
     weight_change = 0.4
