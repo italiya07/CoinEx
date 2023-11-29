@@ -37,7 +37,7 @@ class CustomUserChangeForm(UserChangeForm):
             "first_name",
             "last_name",
             "id_or_photo",
-        ]  # Add custom fields as needed
+        ]
 
 
 class EmailAuthenticationForm(AuthenticationForm):

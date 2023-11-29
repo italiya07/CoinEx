@@ -16,14 +16,17 @@ class News(models.Model):
     def _str_(self):
         return f'{self.title} - {self.published_date}'
 
+# Custom user manager for handling user creation and superuser creation
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
+        # Check if email is provided
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
 
+        # Check if first_name and last_name are provided
         if 'first_name' not in extra_fields:
             raise ValueError('You must provide a first name')
         if 'last_name' not in extra_fields:
@@ -32,6 +35,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    # Create a superuser with additional staff and superuser permissions
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -43,8 +47,8 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+# User model with custom fields and relationships
 class User(AbstractBaseUser, PermissionsMixin):
-# class User(AbstractBaseUser):
 
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
@@ -63,6 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # User._meta.get_field('groups').related_query_name = 'mainApp_user_groups'
     # User._meta.get_field('user_permissions').related_query_name = 'mainApp_user_permissions'
 
+    # Define string representation of the user
     def _str_(self):
         return self.email
 

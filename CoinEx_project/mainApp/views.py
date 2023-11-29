@@ -17,8 +17,6 @@ import stripe
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-
-
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import json
@@ -45,6 +43,94 @@ def apis(change="USD"):
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         # print(e)
         return e
+
+# Index view to display cryptocurrency data
+def index(request):
+    main_data = apis()
+    print(main_data['data'])
+
+    top_gainers, top_losers = extract_top_gainers_and_losers(main_data)
+
+    recently_added = extract_recently_added(main_data)
+
+    data = {
+        "cryptos": main_data['data'],
+        "currency" : 'USD',
+        "top_gainers": top_gainers,
+        "top_losers": top_losers,
+        "recently_added": recently_added
+    }
+    return render(request, 'CoinEx_Index/index.html', context=data)
+
+# Exchange view to display cryptocurrency data for a specific currency
+@login_required(login_url="login")
+def exchange(request, currency_symbol):
+    main_data = apis(currency_symbol)
+    # print(main_data['data'])
+    data = {"cryptos": main_data["data"], "currency": currency_symbol}
+    return render(request, "CoinEx_Index/index.html", context=data)
+
+def contact_us(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Save the form data to the database
+            contact_submission = ContactUs(
+                customer_name=form.cleaned_data['user_name'],
+                customer_email=form.cleaned_data['email'],
+                query=form.cleaned_data['query'],
+                created_at = datetime.now()
+            )
+            contact_submission.save()
+            return HttpResponse('contact_success')  # Redirect to a success page
+    else:
+        form = ContactForm()
+
+    return render(request, 'CoinEx_Index/contact_us2.html', {'form': form})
+
+
+def register(request):
+    if request.method == "POST":
+        form = CustomUserForm(request.POST, request.FILES)
+        # form = CustomUserForm(request.POST)
+
+        if form.is_valid():
+            print("Befor save user")
+            print(form, "*******")
+            user = form.save()
+            # form.save()
+            print("after save user")
+            # login(request, user)
+            return redirect("login")
+
+    else:
+        form = CustomUserForm()
+    return render(request, "CoinEx_Index/register.html", {"form": form})
+
+
+def login(request):
+    if request.method == "POST":
+        form = EmailAuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user.is_authenticated:
+                print("user is authenticated", user.is_authenticated)
+            else:
+                print("not authenticated", user.is_authenticated)
+            django_login(request, user)
+
+            if user.is_authenticated:
+                print("user is authenticated", user.is_authenticated)
+            return redirect("index")  # Redirect to a success page
+    else:
+        form = EmailAuthenticationForm()
+    return render(request, "CoinEx_Index/login.html", {"form": form})
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect("/")
+
 
 def extract_top_gainers_and_losers(main_data, limit=5):
     # Extract the list of cryptocurrencies from main_data
@@ -101,26 +187,6 @@ def extract_recently_added(main_data, limit=5):
         print(f"Error in processing API data: {e}")
         return None
 
-def index(request):
-    main_data = apis()
-    print(main_data['data'])
-
-    top_gainers, top_losers = extract_top_gainers_and_losers(main_data)
-
-    recently_added = extract_recently_added(main_data)
-
-    data = {
-        "cryptos": main_data['data'],
-        "currency" : 'USD',
-        "top_gainers": top_gainers,
-        "top_losers": top_losers,
-        "recently_added": recently_added
-    }
-    # print("\n we are taking context\n")
-    # print(data)
-    # print("-------->", len(main_data))
-
-    return render(request, 'CoinEx_Index/index.html', context=data)
 
 def extract_top_cryptos_by_rank(main_data, limit=10):
     try:
@@ -203,78 +269,6 @@ def crypto_highlights(request):
     # Render the template with the context
     return render(request, 'CoinEx_Index/crypto_highlights.html', context)
 
-
-@login_required(login_url="login")
-def exchange(request, currency_symbol):
-    main_data = apis(currency_symbol)
-    # print(main_data['data'])
-    data = {"cryptos": main_data["data"], "currency": currency_symbol}
-    # print("\n we are taking context\n")
-    # print(data)
-
-    return render(request, "CoinEx_Index/index.html", context=data)
-
-
-def register(request):
-    if request.method == "POST":
-        form = CustomUserForm(request.POST, request.FILES)
-        # form = CustomUserForm(request.POST)
-
-        if form.is_valid():
-            print("Befor save user")
-            print(form, "*******")
-            user = form.save()
-            # form.save()
-            print("after save user")
-            # login(request, user)
-            return redirect("login")
-
-    else:
-        form = CustomUserForm()
-    return render(request, "CoinEx_Index/register.html", {"form": form})
-
-
-def login(request):
-    if request.method == "POST":
-        form = EmailAuthenticationForm(request, request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            if user.is_authenticated:
-                print("user is authenticated", user.is_authenticated)
-            else:
-                print("not authenticated", user.is_authenticated)
-            django_login(request, user)
-
-            if user.is_authenticated:
-                print("user is authenticated", user.is_authenticated)
-            return redirect("index")  # Redirect to a success page
-    else:
-        form = EmailAuthenticationForm()
-    return render(request, "CoinEx_Index/login.html", {"form": form})
-
-
-def logout(request):
-    auth.logout(request)
-    return redirect("/")
-
-
-def contact_us(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Save the form data to the database
-            contact_submission = ContactUs(
-                customer_name=form.cleaned_data['user_name'],
-                customer_email=form.cleaned_data['email'],
-                query=form.cleaned_data['query'],
-                created_at = datetime.now()
-            )
-            contact_submission.save()
-            return HttpResponse('contact_success')  # Redirect to a success page
-    else:
-        form = ContactForm()
-
-    return render(request, 'CoinEx_Index/contact_us2.html', {'form': form})
 
 
 def crypto_highlights(request):
