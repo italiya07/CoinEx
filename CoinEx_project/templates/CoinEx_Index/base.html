@@ -142,7 +142,7 @@
                   <li><a class="dropdown-item" href=" {% url 'profile_list' %}">Profile List</a></li>
       
                   <li>
-                    <a class="dropdown-item" href="{% url 'profile_detail' pk=request.user.id %}">My Profile</a>
+                    {% comment %} <a class="dropdown-item" href="{% url 'profile_detail' pk=request.user.id %}">My Profile</a> {% endcomment %}
                 </li>
                 
                   {% comment %} <li><a class="dropdown-item" href="{%url 'profile_details'%}">My Profile</a></li> {% endcomment %}
@@ -200,12 +200,7 @@
         {% endblock %}
   {% endblock %}
 
-  <div id="content">
-    {% block content %}
-    <!-- Specific page content goes here -->
-    {% endblock %}
-    {% block body %}
-    {% endblock %}
+ 
   </div>
 
 
