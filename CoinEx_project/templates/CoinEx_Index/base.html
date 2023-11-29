@@ -107,45 +107,10 @@
           </li>
           {% endif %}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css">
 
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'contact_us' %}">Contact Us</a>
           </li>
-
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand " href="#">CoinEx</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'register' %}">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
-            </li>
-            
-
-            {% comment %} <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                 data-bs-toggle="dropdown" aria-expanded="false" href = "{%url 'community'%}">
-                  Community
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'community' %}">Community</a></li>
-
-                  <li><a class="dropdown-item" href=" {% url 'profile_list' %}">Profile List</a></li>
-                  <li>
-                    <a class="dropdown-item" href="{% url 'profile_detail' pk=request.user.id %}">My Profile</a>
-                </li>
-                
-              </ul>
-          </li> {% endcomment %}
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -164,46 +129,25 @@
                 </li>
             </ul>
         </li>
-        
 
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href=" ">Exchange</a>
-            </li>
-            
-          
-          </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
         </ul>
-       
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
       </div>
     </div>
   </nav>
   {% block nav %}
 
-    <div class='container'> 
-     <br/>
-     {%if messages%}
-       {%for messaage in messages%}
-       <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{messaage}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-
-       {%endfor%}
-     {%endif%}
-    </div>
-    
-    <div id="content">
-        {% block content %}
-            <!-- Specific page content goes here -->
-        {% endblock %}
   {% endblock %}
 
- 
+  <div id="content">
+    {% block content %}
+    <!-- Specific page content goes here -->
+    {% endblock %}
+    {% block body %}
+    {% endblock %}
   </div>
 
 
